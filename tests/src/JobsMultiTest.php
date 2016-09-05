@@ -7,11 +7,25 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->client = new JobsMulti([]);
+        $providers = [
+            'Careerbuilder' => [
+                'DeveloperKey' => 'YYY',
+            ],
+            'Dice' => [],
+            'Govt' => [],
+            'Indeed' => [
+                'publisher' => 'ZZZ',
+            ],
+        ];
+        $this->client = new JobsMulti($providers);
     }
 
-    public function testItCanGetClientResponse()
+    public function testItCanInstantiateQueryObjects()
     {
-        $this->assertTrue(true);
+        $class = new \ReflectionClass('JobApis\Jobs\Client\JobsMulti');
+        $property = $class->getProperty('careerbuilderQuery');
+        $property->setAccessible(true);
+        // Gets the careerbuilderQuery property even though it's protected
+        var_dump($property->getValue($this->client)); exit;
     }
 }
