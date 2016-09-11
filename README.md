@@ -1,16 +1,32 @@
 # Jobs Multi
-Making it easy to get jobs from multiple job boards at once.
+[![Latest Version](https://img.shields.io/github/release/jobapis/jobs-multi.svg?style=flat-square)](https://github.com/jobapis/jobs-multi/releases)
+[![Software License](https://img.shields.io/badge/license-APACHE%202.0-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/jobapis/jobs-multi/master.svg?style=flat-square&1)](https://travis-ci.org/jobapis/jobs-multi)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/jobapis/jobs-multi.svg?style=flat-square)](https://scrutinizer-ci.com/g/jobapis/jobs-multi/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/jobapis/jobs-multi.svg?style=flat-square)](https://scrutinizer-ci.com/g/jobapis/jobs-multi)
+[![Total Downloads](https://img.shields.io/packagist/dt/jobapis/jobs-multi.svg?style=flat-square)](https://packagist.org/packages/jobapis/jobs-multi)
+
+This package allows you to easily make basic queries to job board APIs supported by [Jobs Common v2](https://github.com/jobapis/jobs-common).
+
+Each client on its own will give you more flexibility and access to all the parameters for its respective API, but this package allows you to query one or more API in a single call.
 
 ## Usage
+
 ```php
-// Include as many or as few providers as you want.
+// Include as many or as few providers as you want. Just be sure to include any required keys.
 $providers = [
-    'Indeed' => [
-        'developerKey' => 'XXX',
+    'Careerbuilder' => [
+        'DeveloperKey' => '<YOUR DEVELOPER KEY>',
     ],
     'Dice' => [],
+    'Govt' => [],
+    'Github' => [],
+    'Indeed' => [
+        'publisher' => '<YOUR PUBLISHER ID>',
+    ],
 ];
 
+// Instantiate a new JobsMulti client
 $client = new JobsMulti($providers);
 
 // Set the parameters in order: Keyword, Location, Page
@@ -25,3 +41,36 @@ $diceJobs = $client->getDiceJobs();
 // Or get an array with results from all the providers at once
 $jobs = $client->getAllJobs();
 ```
+
+The `get<Provider>Jobs()` methods will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) of [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects, while the `getAllJobs()` method will return an array of these collections with keys for each API provider.
+
+## Supported APIs
+
+This package currently supports the following API providers:
+
+- [Careerbuilder](https://github.com/jobapis/jobs-careerbuilder)
+- [Dice](https://github.com/jobapis/jobs-dice)
+- [Govt](https://github.com/jobapis/jobs-govt)
+- [Github](https://github.com/jobapis/jobs-github)
+- [Indeed](https://github.com/jobapis/jobs-indeed)
+
+If you'd like to add support for another provider, please see [Contributing.md](CONTRIBUTING.MD).
+
+## Testing
+
+``` bash
+$ ./vendor/bin/phpunit
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Credits
+
+- [Karl Hughes](https://github.com/karllhughes)
+- [All Contributors](https://github.com/jobapis/jobs-multi/contributors)
+
+## License
+
+The Apache 2.0. Please see [License File](/LICENSE.md) for more information.

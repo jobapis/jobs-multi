@@ -1,7 +1,18 @@
 # Changelog
-All Notable changes to `jobs-multi` will be documented in this file
+All Notable changes to `jobs-multi` will be documented in this file.
 
-## 0.1.0 - 2016-09-XX
+## 0.1.0 - 2016-09-11
 
 ### Added
-- Initial release?
+- Initial pre-release.
+- Support for 5 initial APIs.
+- Unit and integration tests.
+
+## Fixed
+- Nothing
+
+## Removed
+- Nothing
+
+## Security
+- Nothing
