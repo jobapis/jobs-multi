@@ -55,6 +55,15 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($queries['indeedQuery']));
     }
 
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testItThrowsErrorOnInvalidMethodCall()
+    {
+        $method = uniqid();
+        $this->client->$method();
+    }
+
     public function testItCanSetKeywordOnAllProviders()
     {
         $keyword = uniqid();
@@ -170,6 +179,28 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testItCanGetResultsFromSingleApi()
+    {
+        if (!getenv('REAL_CALL')) {
+            $this->markTestSkipped('REAL_CALL not set. Real API calls will not be made.');
+        }
+
+        $keyword = 'engineering';
+        $providers = [
+            'Dice' => [],
+        ];
+        $client = new JobsMulti($providers);
+
+        $client->setKeyword($keyword);
+
+        $results = $client->getDiceJobs();
+
+        $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
+        foreach($results as $job) {
+            $this->assertEquals($keyword, $job->query);
+        }
+    }
+
     public function testItCanGetAllResultsFromApis()
     {
         if (!getenv('REAL_CALL')) {
@@ -189,8 +220,6 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             ->setPage(1, 10);
 
         $jobs = $client->getAllJobs();
-
-        // var_dump($jobs); exit;
 
         foreach ($jobs as $provider => $results) {
             $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);

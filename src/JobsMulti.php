@@ -1,6 +1,5 @@
 <?php namespace JobApis\Jobs\Client;
 
-use JobApis\Jobs\Client\Providers\CareerbuilderProvider;
 use JobApis\Jobs\Client\Queries\AbstractQuery;
 
 class JobsMulti
@@ -27,6 +26,27 @@ class JobsMulti
     }
 
     /**
+     * Overrides get<Provider>Jobs() methods
+     *
+     * @param $method
+     * @param $args
+     *
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        if ($this->isGetJobsByProviderMethod($method)) {
+            return $this->getJobsByProvider($this->getProviderFromMethod($method));
+        }
+
+        throw new \BadMethodCallException(sprintf(
+            '%s does not contain a method by the name of "%s"',
+            __CLASS__,
+            $method
+        ));
+    }
+
+    /**
      * Instantiates a Query object and adds it to the queries array.
      *
      * @param $key string Query name
@@ -50,52 +70,21 @@ class JobsMulti
     {
         $jobs = [];
         foreach ($this->queries as $key => $query) {
-            $providerName = 'JobApis\\Jobs\\Client\\Providers\\'.$key.'Provider';
-            $client = new $providerName($query);
-            $jobs[$key] = $client->getJobs();
+            $jobs[$key] = $this->getJobsByProvider($key);
         }
         return $jobs;
     }
 
     /**
-     * Gets jobs from Careerbuilder and hydrates a new jobs collection.
+     * Gets jobs from a single provider and hydrates a new jobs collection.
      *
      * @return \JobApis\Jobs\Client\Collection
      */
-    public function getCareerbuilderJobs()
+    public function getJobsByProvider($provider)
     {
-        $provider = new CareerbuilderProvider($this->queries['careerbuilderQuery']);
-        return $provider->getJobs();
-    }
-
-    /**
-     * Gets jobs from Dice and hydrates a new jobs collection.
-     *
-     * @return \JobApis\Jobs\Client\Collection
-     */
-    public function getDiceJobs()
-    {
-
-    }
-
-    /**
-     * Gets jobs from the Government Jobs API and hydrates a new jobs collection.
-     *
-     * @return \JobApis\Jobs\Client\Collection
-     */
-    public function getGovtJobs()
-    {
-
-    }
-
-    /**
-     * Gets jobs from Indeed and hydrates a new jobs collection.
-     *
-     * @return \JobApis\Jobs\Client\Collection
-     */
-    public function getIndeedJobs()
-    {
-
+        $providerName = 'JobApis\\Jobs\\Client\\Providers\\'.$provider.'Provider';
+        $client = new $providerName($this->queries[$provider]);
+        return $client->getJobs();
     }
 
     /**
@@ -238,5 +227,30 @@ class JobsMulti
     {
         preg_match("/([^,]+),\s*(\w{2})/", $location, $matches);
         return isset($matches[1]) && isset($matches[2]) ? true : false;
+    }
+
+    /**
+     * Tests whether the method is a valid get<Provider>Jobs() method.
+     *
+     * @param $method
+     *
+     * @return bool
+     */
+    private function isGetJobsByProviderMethod($method)
+    {
+        return preg_match('/(get)(.*?)(Jobs)/', $method, $matches) && $matches[2] && isset($this->queries[$matches[2]]);
+    }
+
+    /**
+     * Get the provider name from the method.
+     *
+     * @param $method
+     *
+     * @return string
+     */
+    private function getProviderFromMethod($method)
+    {
+        preg_match('/(get)(.*?)(Jobs)/', $method, $matches);
+        return $matches[2];
     }
 }
