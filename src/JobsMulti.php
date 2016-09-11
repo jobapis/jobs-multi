@@ -22,16 +22,18 @@ class JobsMulti
         foreach ($providers as $provider => $options) {
             $query = $provider.'Query';
             $className = 'JobApis\\Jobs\\Client\\Queries\\'.$query;
-            $this->addQuery(lcfirst($query), $className, $options);
+            $this->addQuery($provider, $className, $options);
         }
     }
 
     /**
-     * Instantiates a Query object and adds it to the queries array
+     * Instantiates a Query object and adds it to the queries array.
      *
-     * @param $key Query name
-     * @param $className Query class name
-     * @param array $options Array of parameters to add to constructor
+     * @param $key string Query name
+     * @param $className string Query class name
+     * @param $options array Parameters to add to constructor
+     *
+     * @return $this
      */
     public function addQuery($key, $className, $options = [])
     {
@@ -40,7 +42,23 @@ class JobsMulti
     }
 
     /**
-     * Gets jobs from Careerbuilder and hydrates a new jobs collection
+     * Gets jobs from all providers in a single go and returns an array of Collection objects.
+     *
+     * @return array
+     */
+    public function getAllJobs()
+    {
+        $jobs = [];
+        foreach ($this->queries as $key => $query) {
+            $providerName = 'JobApis\\Jobs\\Client\\Providers\\'.$key.'Provider';
+            $client = new $providerName($query);
+            $jobs[$key] = $client->getJobs();
+        }
+        return $jobs;
+    }
+
+    /**
+     * Gets jobs from Careerbuilder and hydrates a new jobs collection.
      *
      * @return \JobApis\Jobs\Client\Collection
      */
@@ -51,7 +69,7 @@ class JobsMulti
     }
 
     /**
-     * Gets jobs from Dice and hydrates a new jobs collection
+     * Gets jobs from Dice and hydrates a new jobs collection.
      *
      * @return \JobApis\Jobs\Client\Collection
      */
@@ -61,7 +79,7 @@ class JobsMulti
     }
 
     /**
-     * Gets jobs from the Government Jobs API and hydrates a new jobs collection
+     * Gets jobs from the Government Jobs API and hydrates a new jobs collection.
      *
      * @return \JobApis\Jobs\Client\Collection
      */
@@ -71,7 +89,7 @@ class JobsMulti
     }
 
     /**
-     * Gets jobs from Indeed and hydrates a new jobs collection
+     * Gets jobs from Indeed and hydrates a new jobs collection.
      *
      * @return \JobApis\Jobs\Client\Collection
      */
@@ -81,42 +99,40 @@ class JobsMulti
     }
 
     /**
-     * Sets a keyword on the query for each provider
+     * Sets a keyword on the query for each provider.
      *
-     * @param $keyword
+     * @param $keyword string
      *
      * @return $this
      */
     public function setKeyword($keyword)
     {
-        foreach ($this->queries as $classKey => $query) {
-            $className = ucfirst($classKey);
-
-            switch ($className) {
-                case 'CareerbuilderQuery':
+        foreach ($this->queries as $provider => $query) {
+            switch ($provider) {
+                case 'Careerbuilder':
                     $query->set('Keywords', $keyword);
                     break;
-                case 'DiceQuery':
+                case 'Dice':
                     $query->set('text', $keyword);
                     break;
-                case 'GovtQuery':
+                case 'Govt':
                     $query->set('query', $keyword);
                     break;
-                case 'GithubQuery':
+                case 'Github':
                     $query->set('search', $keyword);
                     break;
-                case 'IndeedQuery':
+                case 'Indeed':
                     $query->set('q', $keyword);
                     break;
                 default:
-                    throw new \Exception("Provider {$className} not found");
+                    throw new \Exception("Provider {$provider} not found");
             }
         }
         return $this;
     }
 
     /**
-     * Sets a location on the query for each provider
+     * Sets a location on the query for each provider.
      *
      * @param $location
      *
@@ -125,54 +141,94 @@ class JobsMulti
     public function setLocation($location)
     {
         if (!$this->isValidLocation($location)) {
-            throw new \OutOfRangeException("Location parameter must follow the pattern 'City, ST'.");
+            throw new \OutOfBoundsException("Location parameter must follow the pattern 'City, ST'.");
         }
 
         $locationArr = explode(', ', $location);
         $city = $locationArr[0];
         $state = $locationArr[1];
 
-        foreach ($this->queries as $classKey => $query) {
-            $className = ucfirst($classKey);
-
-            switch ($className) {
-                case 'CareerbuilderQuery':
+        foreach ($this->queries as $provider => $query) {
+            switch ($provider) {
+                case 'Careerbuilder':
                     $query->set('UseFacets', 'true');
                     $query->set('FacetCityState', $location);
                     break;
-                case 'DiceQuery':
+                case 'Dice':
                     $query->set('city', $city);
                     $query->set('state', $state);
                     break;
-                case 'GovtQuery':
+                case 'Govt':
                     $queryString = $query->get('query').' in '.$location;
                     $query->set('query', $queryString);
                     break;
-                case 'GithubQuery':
+                case 'Github':
                     $query->set('location', $location);
                     break;
-                case 'IndeedQuery':
+                case 'Indeed':
                     $query->set('l', $location);
                     break;
                 default:
-                    throw new \Exception("Provider {$className} not found");
+                    throw new \Exception("Provider {$provider} not found");
             }
         }
         return $this;
     }
 
-    public function setPage($page)
+    /**
+     * Sets a page number and number of results per page for each provider.
+     *
+     * @param $page integer
+     * @param $perPage integer
+     *
+     * @return $this
+     */
+    public function setPage($page = 1, $perPage = 10)
     {
-        return $this;
-    }
-
-    public function setPerPage($perPage)
-    {
+        foreach ($this->queries as $provider => $query) {
+            switch ($provider) {
+                case 'Careerbuilder':
+                    $query->set('PageNumber', $page);
+                    $query->set('PerPage', $perPage);
+                    break;
+                case 'Dice':
+                    $query->set('page', $page);
+                    $query->set('pgcnt', $perPage);
+                    break;
+                case 'Govt':
+                    $query->set('size', $perPage);
+                    $query->set('from', $this->getStartFrom($page, $perPage));
+                    break;
+                case 'Github':
+                    $query->set('page', $page-1);
+                    // No per_page option
+                    break;
+                case 'Indeed':
+                    $query->set('limit', $perPage);
+                    $query->set('start', $this->getStartFrom($page, $perPage));
+                    break;
+                default:
+                    throw new \Exception("Provider {$provider} not found");
+            }
+        }
         return $this;
     }
 
     /**
-     * Tests whether location string follows valid convention (City, ST)
+     * Gets a start from count for APIs that use per_page and start_from pattern.
+     *
+     * @param int $page
+     * @param int $perPage
+     *
+     * @return int
+     */
+    private function getStartFrom($page = 1, $perPage = 10)
+    {
+        return ($page * $perPage) - $perPage;
+    }
+
+    /**
+     * Tests whether location string follows valid convention (City, ST).
      *
      * @param string $location
      *
@@ -181,6 +237,6 @@ class JobsMulti
     private function isValidLocation($location = null)
     {
         preg_match("/([^,]+),\s*(\w{2})/", $location, $matches);
-        return ($matches[1] && $matches[2]) ? true : false;
+        return isset($matches[1]) && isset($matches[2]) ? true : false;
     }
 }
