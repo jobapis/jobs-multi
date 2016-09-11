@@ -10,7 +10,6 @@ This package allows you to easily make basic queries to job board APIs supported
 
 Each client on its own will give you more flexibility and access to all the parameters for its respective API, but this package allows you to query one or more API in a single call.
 
-
 ## Usage
 
 ```php
