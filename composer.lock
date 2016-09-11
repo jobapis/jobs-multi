@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "71ca91044f2f47571234aedfb7559e98",
-    "content-hash": "b15dda1745d42e395c1448294e7c2baa",
+    "hash": "30cabd18bfcb79b1d64b08fcbfb50dfe",
+    "content-hash": "dcec09540ec2894e74f5428c678112bd",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -180,16 +180,16 @@
         },
         {
             "name": "jobapis/jobs-careerbuilder",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jobapis/jobs-careerbuilder.git",
-                "reference": "c77922418f3a7a197c6a4f39c16bffd3cc8b31e5"
+                "reference": "961f476b96eb3328d3c007711c0d60834c9b2100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jobapis/jobs-careerbuilder/zipball/c77922418f3a7a197c6a4f39c16bffd3cc8b31e5",
-                "reference": "c77922418f3a7a197c6a4f39c16bffd3cc8b31e5",
+                "url": "https://api.github.com/repos/jobapis/jobs-careerbuilder/zipball/961f476b96eb3328d3c007711c0d60834c9b2100",
+                "reference": "961f476b96eb3328d3c007711c0d60834c9b2100",
                 "shasum": ""
             },
             "require": {
@@ -232,7 +232,7 @@
                 "jobs",
                 "object"
             ],
-            "time": "2016-09-03 15:35:01"
+            "time": "2016-09-06 00:08:42"
         },
         {
             "name": "jobapis/jobs-common",
@@ -293,16 +293,16 @@
         },
         {
             "name": "jobapis/jobs-dice",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jobapis/jobs-dice.git",
-                "reference": "d08003cefd00dc053911d548abe98947470ff78a"
+                "reference": "b58cdda8a5e78f431d129450114add6988fcb5fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jobapis/jobs-dice/zipball/d08003cefd00dc053911d548abe98947470ff78a",
-                "reference": "d08003cefd00dc053911d548abe98947470ff78a",
+                "url": "https://api.github.com/repos/jobapis/jobs-dice/zipball/b58cdda8a5e78f431d129450114add6988fcb5fa",
+                "reference": "b58cdda8a5e78f431d129450114add6988fcb5fa",
                 "shasum": ""
             },
             "require": {
@@ -345,7 +345,63 @@
                 "jobs",
                 "object"
             ],
-            "time": "2016-09-03 15:28:03"
+            "time": "2016-09-08 00:54:18"
+        },
+        {
+            "name": "jobapis/jobs-github",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jobapis/jobs-github.git",
+                "reference": "1461e7862864b0d38bf0005ff13782c5f9fd965c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jobapis/jobs-github/zipball/1461e7862864b0d38bf0005ff13782c5f9fd965c",
+                "reference": "1461e7862864b0d38bf0005ff13782c5f9fd965c",
+                "shasum": ""
+            },
+            "require": {
+                "jobapis/jobs-common": "^2.0.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "mockery/mockery": ">=0.9.4",
+                "phpunit/php-code-coverage": "~2.0",
+                "phpunit/phpunit": ">=4.6",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JobApis\\Jobs\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Steven Maguire",
+                    "email": "stevenmaguire@gmail.com",
+                    "homepage": "https://github.com/stevenmaguire"
+                },
+                {
+                    "name": "Karl Hughes",
+                    "email": "khughes.me@gmail.com",
+                    "homepage": "https://github.com/karllhughes"
+                }
+            ],
+            "description": "Making it simple to integrate your application with Github Jobs API.",
+            "homepage": "https://github.com/JobBrander/jobs-github",
+            "keywords": [
+                "api client",
+                "github",
+                "jobs",
+                "object"
+            ],
+            "time": "2016-09-08 01:47:54"
         },
         {
             "name": "jobapis/jobs-govt",
