@@ -53,6 +53,7 @@ This package currently supports the following API providers:
 - [Govt](https://github.com/jobapis/jobs-govt)
 - [Github](https://github.com/jobapis/jobs-github)
 - [Indeed](https://github.com/jobapis/jobs-indeed)
+- [USAJobs](https://github.com/jobapis/jobs-usajobs)
 
 If you'd like to add support for another provider, please see [Contributing.md](CONTRIBUTING.MD).
 

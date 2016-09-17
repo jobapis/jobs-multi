@@ -9,13 +9,16 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
     {
         $this->providers = [
             'Careerbuilder' => [
-                'DeveloperKey' => 'YYY',
+                'DeveloperKey' => uniqid(),
             ],
             'Dice' => [],
             'Govt' => [],
             'Github' => [],
             'Indeed' => [
-                'publisher' => 'ZZZ',
+                'publisher' => uniqid(),
+            ],
+            'Usajobs' => [
+                'AuthorizationKey' => uniqid(),
             ],
         ];
         $this->client = new JobsMulti($this->providers);
@@ -90,6 +93,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Indeed':
                     $this->assertEquals($keyword, $queries[$key]->get('q'));
                     break;
+                case 'Usajobs':
+                    $this->assertEquals($keyword, $queries[$key]->get('Keyword'));
+                    break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
             }
@@ -125,6 +131,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     break;
                 case 'Indeed':
                     $this->assertEquals($location, $queries[$key]->get('l'));
+                    break;
+                case 'Usajobs':
+                    $this->assertEquals($location, $queries[$key]->get('LocationName'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
@@ -172,6 +181,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Indeed':
                     $this->assertEquals($perPage, $queries[$key]->get('limit'));
                     $this->assertEquals($startFrom, $queries[$key]->get('start'));
+                    break;
+                case 'Usajobs':
+                    $this->assertEquals($page, $queries[$key]->get('Page'));
+                    $this->assertEquals($perPage, $queries[$key]->get('ResultsPerPage'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
