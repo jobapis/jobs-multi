@@ -113,6 +113,9 @@ class JobsMulti
                 case 'Indeed':
                     $query->set('q', $keyword);
                     break;
+                case 'Usajobs':
+                    $query->set('Keyword', $keyword);
+                    break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
             }
@@ -157,6 +160,9 @@ class JobsMulti
                 case 'Indeed':
                     $query->set('l', $location);
                     break;
+                case 'Usajobs':
+                    $query->set('LocationName', $location);
+                    break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
             }
@@ -195,6 +201,10 @@ class JobsMulti
                 case 'Indeed':
                     $query->set('limit', $perPage);
                     $query->set('start', $this->getStartFrom($page, $perPage));
+                    break;
+                case 'Usajobs':
+                    $query->set('Page', $page);
+                    $query->set('ResultsPerPage', $perPage);
                     break;
                 default:
                     throw new \Exception("Provider {$provider} not found");

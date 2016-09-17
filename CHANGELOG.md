@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.2.0 - 2016-09-17
+
+### Added
+- Support for [USAJobs](https://github.com/jobapis/jobs-usajobs)
+
 ## 0.1.0 - 2016-09-11
 
 ### Added

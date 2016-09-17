@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "30cabd18bfcb79b1d64b08fcbfb50dfe",
-    "content-hash": "dcec09540ec2894e74f5428c678112bd",
+    "hash": "6f597a1aa308705054e06b24c55925c6",
+    "content-hash": "033f7ca6469c6e7eba49834e209b36b3",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -514,6 +514,57 @@
                 "object"
             ],
             "time": "2016-09-03 15:20:33"
+        },
+        {
+            "name": "jobapis/jobs-usajobs",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jobapis/jobs-usajobs.git",
+                "reference": "5612942c5036d71a6955e416fb9dc220aca8d53a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jobapis/jobs-usajobs/zipball/5612942c5036d71a6955e416fb9dc220aca8d53a",
+                "reference": "5612942c5036d71a6955e416fb9dc220aca8d53a",
+                "shasum": ""
+            },
+            "require": {
+                "jobapis/jobs-common": "^2.0.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "mockery/mockery": ">=0.9.4",
+                "phpunit/php-code-coverage": "~2.0",
+                "phpunit/phpunit": ">=4.6",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JobApis\\Jobs\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Karl Hughes",
+                    "email": "khughes.me@gmail.com",
+                    "homepage": "https://github.com/karllhughes"
+                }
+            ],
+            "description": "Making it simple to integrate your application with the USAJOBS API.",
+            "homepage": "https://github.com/jobapis/jobs-usajobs",
+            "keywords": [
+                "api client",
+                "jobs",
+                "object",
+                "usajobs"
+            ],
+            "time": "2016-09-17 21:31:03"
         },
         {
             "name": "psr/http-message",
