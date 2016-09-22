@@ -24,6 +24,10 @@ $providers = [
     'Indeed' => [
         'publisher' => '<YOUR PUBLISHER ID>',
     ],
+    'Usajobs' => [
+        'AuthorizationKey' => '<YOUR API KEY>',
+    ],
+    'Careercast' => [],
 ];
 
 // Instantiate a new JobsMulti client

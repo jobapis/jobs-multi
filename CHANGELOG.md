@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.3.1 - 2016-09-22
+
+### Added
+- New providers to documentation.
+
 ## 0.3.0 - 2016-09-22
 
 ### Added
