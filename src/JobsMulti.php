@@ -116,6 +116,9 @@ class JobsMulti
                 case 'Usajobs':
                     $query->set('Keyword', $keyword);
                     break;
+                case 'Careercast':
+                    $query->set('keyword', $keyword);
+                    break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
             }
@@ -163,6 +166,9 @@ class JobsMulti
                 case 'Usajobs':
                     $query->set('LocationName', $location);
                     break;
+                case 'Careercast':
+                    $query->set('location', $location);
+                    break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
             }
@@ -205,6 +211,10 @@ class JobsMulti
                 case 'Usajobs':
                     $query->set('Page', $page);
                     $query->set('ResultsPerPage', $perPage);
+                    break;
+                case 'Careercast':
+                    $query->set('page', $page);
+                    $query->set('rows', $perPage);
                     break;
                 default:
                     throw new \Exception("Provider {$provider} not found");

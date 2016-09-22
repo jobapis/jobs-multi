@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.3.0 - 2016-09-22
+
+### Added
+- Support for [Careercast](https://github.com/jobapis/jobs-careercast)
+
 ## 0.2.0 - 2016-09-17
 
 ### Added

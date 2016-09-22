@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6f597a1aa308705054e06b24c55925c6",
-    "content-hash": "033f7ca6469c6e7eba49834e209b36b3",
+    "hash": "12ccbdf84e7df34f15132717702d802c",
+    "content-hash": "635bc85be45021af34bc1a74158dede6",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -233,6 +233,58 @@
                 "object"
             ],
             "time": "2016-09-06 00:08:42"
+        },
+        {
+            "name": "jobapis/jobs-careercast",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jobapis/jobs-careercast.git",
+                "reference": "feacd9af4e1c44f3149d68d135ba46a267441e0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jobapis/jobs-careercast/zipball/feacd9af4e1c44f3149d68d135ba46a267441e0c",
+                "reference": "feacd9af4e1c44f3149d68d135ba46a267441e0c",
+                "shasum": ""
+            },
+            "require": {
+                "jobapis/jobs-common": "^2.0.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "mockery/mockery": ">=0.9.4",
+                "phpunit/php-code-coverage": "~2.0",
+                "phpunit/phpunit": ">=4.6",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JobApis\\Jobs\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Karl Hughes",
+                    "email": "khughes.me@gmail.com",
+                    "homepage": "https://github.com/karllhughes"
+                }
+            ],
+            "description": "Making it simple to integrate your application with Careercast's Jobs RSS feed.",
+            "homepage": "https://github.com/JobBrander/jobs-careercast",
+            "keywords": [
+                "api client",
+                "careercast",
+                "jobs",
+                "object",
+                "rss client"
+            ],
+            "time": "2016-09-22 17:01:12"
         },
         {
             "name": "jobapis/jobs-common",

@@ -24,7 +24,8 @@
     "jobapis/jobs-govt": "^1.0.0",
     "jobapis/jobs-github": "^1.0.0",
     "jobapis/jobs-indeed": "^1.0.0",
-    "jobapis/jobs-usajobs": "^0.1.0"
+    "jobapis/jobs-usajobs": "^0.1.0",
+    "jobapis/jobs-careercast": "^1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.6",

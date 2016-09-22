@@ -20,6 +20,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Usajobs' => [
                 'AuthorizationKey' => uniqid(),
             ],
+            'Careercast' => [],
         ];
         $this->client = new JobsMulti($this->providers);
     }
@@ -96,6 +97,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Usajobs':
                     $this->assertEquals($keyword, $queries[$key]->get('Keyword'));
                     break;
+                case 'Careercast':
+                    $this->assertEquals($keyword, $queries[$key]->get('keyword'));
+                    break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
             }
@@ -134,6 +138,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     break;
                 case 'Usajobs':
                     $this->assertEquals($location, $queries[$key]->get('LocationName'));
+                    break;
+                case 'Careercast':
+                    $this->assertEquals($location, $queries[$key]->get('location'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
@@ -185,6 +192,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Usajobs':
                     $this->assertEquals($page, $queries[$key]->get('Page'));
                     $this->assertEquals($perPage, $queries[$key]->get('ResultsPerPage'));
+                    break;
+                case 'Careercast':
+                    $this->assertEquals($page, $queries[$key]->get('page'));
+                    $this->assertEquals($perPage, $queries[$key]->get('rows'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
