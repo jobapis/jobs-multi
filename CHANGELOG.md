@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.3.2 - 2016-09-25
+
+### Removed
+- composer.lock file.
+
 ## 0.3.1 - 2016-09-22
 
 ### Added
