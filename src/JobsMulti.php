@@ -101,23 +101,26 @@ class JobsMulti
                 case 'Careerbuilder':
                     $query->set('Keywords', $keyword);
                     break;
+                case 'Careercast':
+                    $query->set('keyword', $keyword);
+                    break;
                 case 'Dice':
                     $query->set('text', $keyword);
-                    break;
-                case 'Govt':
-                    $query->set('query', $keyword);
                     break;
                 case 'Github':
                     $query->set('search', $keyword);
                     break;
+                case 'Govt':
+                    $query->set('query', $keyword);
+                    break;
                 case 'Indeed':
                     $query->set('q', $keyword);
                     break;
+                case 'Juju':
+                    $query->set('k', $keyword);
+                    break;
                 case 'Usajobs':
                     $query->set('Keyword', $keyword);
-                    break;
-                case 'Careercast':
-                    $query->set('keyword', $keyword);
                     break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
@@ -149,25 +152,28 @@ class JobsMulti
                     $query->set('UseFacets', 'true');
                     $query->set('FacetCityState', $location);
                     break;
+                case 'Careercast':
+                    $query->set('location', $location);
+                    break;
                 case 'Dice':
                     $query->set('city', $city);
                     $query->set('state', $state);
+                    break;
+                case 'Github':
+                    $query->set('location', $location);
                     break;
                 case 'Govt':
                     $queryString = $query->get('query').' in '.$location;
                     $query->set('query', $queryString);
                     break;
-                case 'Github':
-                    $query->set('location', $location);
-                    break;
                 case 'Indeed':
+                    $query->set('l', $location);
+                    break;
+                case 'Juju':
                     $query->set('l', $location);
                     break;
                 case 'Usajobs':
                     $query->set('LocationName', $location);
-                    break;
-                case 'Careercast':
-                    $query->set('location', $location);
                     break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
@@ -192,29 +198,33 @@ class JobsMulti
                     $query->set('PageNumber', $page);
                     $query->set('PerPage', $perPage);
                     break;
+                case 'Careercast':
+                    $query->set('page', $page);
+                    $query->set('rows', $perPage);
+                    break;
                 case 'Dice':
                     $query->set('page', $page);
                     $query->set('pgcnt', $perPage);
-                    break;
-                case 'Govt':
-                    $query->set('size', $perPage);
-                    $query->set('from', $this->getStartFrom($page, $perPage));
                     break;
                 case 'Github':
                     $query->set('page', $page-1);
                     // No per_page option
                     break;
+                case 'Govt':
+                    $query->set('size', $perPage);
+                    $query->set('from', $this->getStartFrom($page, $perPage));
+                    break;
                 case 'Indeed':
                     $query->set('limit', $perPage);
                     $query->set('start', $this->getStartFrom($page, $perPage));
                     break;
+                case 'Juju':
+                    $query->set('page', $page);
+                    $query->set('jpp', $perPage);
+                    break;
                 case 'Usajobs':
                     $query->set('Page', $page);
                     $query->set('ResultsPerPage', $perPage);
-                    break;
-                case 'Careercast':
-                    $query->set('page', $page);
-                    $query->set('rows', $perPage);
                     break;
                 default:
                     throw new \Exception("Provider {$provider} not found");

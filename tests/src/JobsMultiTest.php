@@ -17,6 +17,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Indeed' => [
                 'publisher' => uniqid(),
             ],
+            'Juju' => [
+                'partnerid' => uniqid(),
+            ],
             'Usajobs' => [
                 'AuthorizationKey' => uniqid(),
             ],
@@ -82,23 +85,26 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Careerbuilder':
                     $this->assertEquals($keyword, $queries[$key]->get('Keywords'));
                 break;
+                case 'Careercast':
+                    $this->assertEquals($keyword, $queries[$key]->get('keyword'));
+                    break;
                 case 'Dice':
                     $this->assertEquals($keyword, $queries[$key]->get('text'));
-                break;
-                case 'Govt':
-                    $this->assertEquals($keyword, $queries[$key]->get('query'));
                 break;
                 case 'Github':
                     $this->assertEquals($keyword, $queries[$key]->get('search'));
                     break;
+                case 'Govt':
+                    $this->assertEquals($keyword, $queries[$key]->get('query'));
+                break;
                 case 'Indeed':
                     $this->assertEquals($keyword, $queries[$key]->get('q'));
                     break;
+                case 'Juju':
+                    $this->assertEquals($keyword, $queries[$key]->get('k'));
+                    break;
                 case 'Usajobs':
                     $this->assertEquals($keyword, $queries[$key]->get('Keyword'));
-                    break;
-                case 'Careercast':
-                    $this->assertEquals($keyword, $queries[$key]->get('keyword'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
@@ -123,24 +129,27 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     $this->assertEquals('true', $queries[$key]->get('UseFacets'));
                     $this->assertEquals($location, $queries[$key]->get('FacetCityState'));
                     break;
+                case 'Careercast':
+                    $this->assertEquals($location, $queries[$key]->get('location'));
+                    break;
                 case 'Dice':
                     $this->assertEquals($city, $queries[$key]->get('city'));
                     $this->assertEquals($state, $queries[$key]->get('state'));
                     break;
-                case 'Govt':
-                    $this->assertNotEquals(false, strpos($queries[$key]->get('query'), 'in '.$location));
-                    break;
                 case 'Github':
                     $this->assertEquals($location, $queries[$key]->get('location'));
+                    break;
+                case 'Govt':
+                    $this->assertNotEquals(false, strpos($queries[$key]->get('query'), 'in '.$location));
                     break;
                 case 'Indeed':
                     $this->assertEquals($location, $queries[$key]->get('l'));
                     break;
+                case 'Juju':
+                    $this->assertEquals($location, $queries[$key]->get('l'));
+                    break;
                 case 'Usajobs':
                     $this->assertEquals($location, $queries[$key]->get('LocationName'));
-                    break;
-                case 'Careercast':
-                    $this->assertEquals($location, $queries[$key]->get('location'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
@@ -174,28 +183,32 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     $this->assertEquals($page, $queries[$key]->get('PageNumber'));
                     $this->assertEquals($perPage, $queries[$key]->get('PerPage'));
                     break;
+                case 'Careercast':
+                    $this->assertEquals($page, $queries[$key]->get('page'));
+                    $this->assertEquals($perPage, $queries[$key]->get('rows'));
+                    break;
                 case 'Dice':
                     $this->assertEquals($page, $queries[$key]->get('page'));
                     $this->assertEquals($perPage, $queries[$key]->get('pgcnt'));
+                    break;
+                case 'Github':
+                    $this->assertEquals($page-1, $queries[$key]->get('page'));
                     break;
                 case 'Govt':
                     $this->assertEquals($perPage, $queries[$key]->get('size'));
                     $this->assertEquals($startFrom, $queries[$key]->get('from'));
                     break;
-                case 'Github':
-                    $this->assertEquals($page-1, $queries[$key]->get('page'));
-                    break;
                 case 'Indeed':
                     $this->assertEquals($perPage, $queries[$key]->get('limit'));
                     $this->assertEquals($startFrom, $queries[$key]->get('start'));
                     break;
+                case 'Juju':
+                    $this->assertEquals($perPage, $queries[$key]->get('jpp'));
+                    $this->assertEquals($page, $queries[$key]->get('page'));
+                    break;
                 case 'Usajobs':
                     $this->assertEquals($page, $queries[$key]->get('Page'));
                     $this->assertEquals($perPage, $queries[$key]->get('ResultsPerPage'));
-                    break;
-                case 'Careercast':
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('rows'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");

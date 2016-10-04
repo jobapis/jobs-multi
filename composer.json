@@ -20,12 +20,13 @@
   "require": {
     "php": ">=5.5.0",
     "jobapis/jobs-careerbuilder": "^2.0.0",
+    "jobapis/jobs-careercast": "^1.0.0",
     "jobapis/jobs-dice": "^1.0.0",
-    "jobapis/jobs-govt": "^1.0.0",
     "jobapis/jobs-github": "^1.0.0",
+    "jobapis/jobs-govt": "^1.0.0",
     "jobapis/jobs-indeed": "^1.0.0",
-    "jobapis/jobs-usajobs": "^0.1.0",
-    "jobapis/jobs-careercast": "^1.0.0"
+    "jobapis/jobs-juju": "^2.0.0",
+    "jobapis/jobs-usajobs": "^0.1.0"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.6",

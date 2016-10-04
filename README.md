@@ -18,16 +18,19 @@ $providers = [
     'Careerbuilder' => [
         'DeveloperKey' => '<YOUR DEVELOPER KEY>',
     ],
+    'Careercast' => [],
     'Dice' => [],
-    'Govt' => [],
     'Github' => [],
+    'Govt' => [],
     'Indeed' => [
         'publisher' => '<YOUR PUBLISHER ID>',
+    ],
+    'Juju' => [
+        'partnerid' => '<YOUR PARTNER ID>',
     ],
     'Usajobs' => [
         'AuthorizationKey' => '<YOUR API KEY>',
     ],
-    'Careercast' => [],
 ];
 
 // Instantiate a new JobsMulti client

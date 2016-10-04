@@ -1,6 +1,14 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.4.0 - 2016-10-03
+
+### Added
+- Support for [Juju](https://github.com/jobapis/jobs-juju)
+
+### Fixed
+- Alphabetizing calls to providers.
+
 ## 0.3.2 - 2016-09-25
 
 ### Removed
