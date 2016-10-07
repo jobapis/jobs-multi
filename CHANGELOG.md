@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.4.1 - 2016-10-06
+
+### Fixed
+- Upgrading dependencies with bug fixes.
+
 ## 0.4.0 - 2016-10-03
 
 ### Added
