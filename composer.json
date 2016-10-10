@@ -26,7 +26,8 @@
     "jobapis/jobs-govt": "^1.0.0",
     "jobapis/jobs-indeed": "^1.0.0",
     "jobapis/jobs-juju": "^2.0.0",
-    "jobapis/jobs-usajobs": "^0.2.0"
+    "jobapis/jobs-usajobs": "^0.2.0",
+    "jobapis/jobs-ziprecruiter": "^1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.6",

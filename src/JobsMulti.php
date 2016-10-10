@@ -122,6 +122,9 @@ class JobsMulti
                 case 'Usajobs':
                     $query->set('Keyword', $keyword);
                     break;
+                case 'Ziprecruiter':
+                    $query->set('search', $keyword);
+                    break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
             }
@@ -175,6 +178,9 @@ class JobsMulti
                 case 'Usajobs':
                     $query->set('LocationName', $location);
                     break;
+                case 'Ziprecruiter':
+                    $query->set('location', $location);
+                    break;
                 default:
                     throw new \Exception("Provider {$provider} not found");
             }
@@ -225,6 +231,10 @@ class JobsMulti
                 case 'Usajobs':
                     $query->set('Page', $page);
                     $query->set('ResultsPerPage', $perPage);
+                    break;
+                case 'Ziprecruiter':
+                    $query->set('page', $page);
+                    $query->set('jobs_per_page', $perPage);
                     break;
                 default:
                     throw new \Exception("Provider {$provider} not found");

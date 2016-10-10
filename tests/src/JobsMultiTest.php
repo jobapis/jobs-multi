@@ -11,9 +11,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Careerbuilder' => [
                 'DeveloperKey' => uniqid(),
             ],
+            'Careercast' => [],
             'Dice' => [],
-            'Govt' => [],
             'Github' => [],
+            'Govt' => [],
             'Indeed' => [
                 'publisher' => uniqid(),
             ],
@@ -23,7 +24,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Usajobs' => [
                 'AuthorizationKey' => uniqid(),
             ],
-            'Careercast' => [],
+            'Ziprecruiter' => [
+                'api_key' => uniqid(),
+            ],
         ];
         $this->client = new JobsMulti($this->providers);
     }
@@ -106,6 +109,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Usajobs':
                     $this->assertEquals($keyword, $queries[$key]->get('Keyword'));
                     break;
+                case 'Ziprecruiter':
+                    $this->assertEquals($keyword, $queries[$key]->get('search'));
+                    break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
             }
@@ -150,6 +156,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     break;
                 case 'Usajobs':
                     $this->assertEquals($location, $queries[$key]->get('LocationName'));
+                    break;
+                case 'Ziprecruiter':
+                    $this->assertEquals($location, $queries[$key]->get('location'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");
@@ -209,6 +218,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Usajobs':
                     $this->assertEquals($page, $queries[$key]->get('Page'));
                     $this->assertEquals($perPage, $queries[$key]->get('ResultsPerPage'));
+                    break;
+                case 'Ziprecruiter':
+                    $this->assertEquals($page, $queries[$key]->get('page'));
+                    $this->assertEquals($perPage, $queries[$key]->get('jobs_per_page'));
                     break;
                 default:
                     throw new \Exception("Provider {$key} not found in test.");

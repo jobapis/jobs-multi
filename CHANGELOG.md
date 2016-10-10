@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.5.0 - 2016-10-10
+
+### Added
+- Support for [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)
+
 ## 0.4.1 - 2016-10-06
 
 ### Fixed

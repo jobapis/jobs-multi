@@ -31,6 +31,9 @@ $providers = [
     'Usajobs' => [
         'AuthorizationKey' => '<YOUR API KEY>',
     ],
+    'Ziprecruiter' => [
+        'api_key' => '<YOUR API KEY>',
+    ],
 ];
 
 // Instantiate a new JobsMulti client
@@ -56,11 +59,14 @@ The `get<Provider>Jobs()` methods will return a [Collection](https://github.com/
 This package currently supports the following API providers:
 
 - [Careerbuilder](https://github.com/jobapis/jobs-careerbuilder)
+- [Careercast](https://github.com/jobapis/jobs-careercast)
 - [Dice](https://github.com/jobapis/jobs-dice)
-- [Govt](https://github.com/jobapis/jobs-govt)
 - [Github](https://github.com/jobapis/jobs-github)
+- [Govt](https://github.com/jobapis/jobs-govt)
 - [Indeed](https://github.com/jobapis/jobs-indeed)
+- [Juju](https://github.com/jobapis/jobs-juju)
 - [USAJobs](https://github.com/jobapis/jobs-usajobs)
+- [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)
 
 If you'd like to add support for another provider, please see [Contributing.md](CONTRIBUTING.MD).
 
