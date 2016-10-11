@@ -1,5 +1,6 @@
 <?php namespace JobApis\Jobs\Client;
 
+use JobApis\Jobs\Client\Providers\AbstractProvider;
 use JobApis\Jobs\Client\Queries\AbstractQuery;
 
 class JobsMulti
@@ -82,9 +83,13 @@ class JobsMulti
      */
     public function getJobsByProvider($provider)
     {
-        $providerName = 'JobApis\\Jobs\\Client\\Providers\\'.$provider.'Provider';
-        $client = new $providerName($this->queries[$provider]);
-        return $client->getJobs();
+        try {
+            $providerName = 'JobApis\\Jobs\\Client\\Providers\\' . $provider . 'Provider';
+            $client = self::createProvider($providerName, $this->queries[$provider]);
+            return $client->getJobs();
+        } catch (\Exception $e) {
+            return (new Collection())->addError($e->getMessage());
+        }
     }
 
     /**
@@ -241,6 +246,19 @@ class JobsMulti
             }
         }
         return $this;
+    }
+
+    /**
+     * Instantiates a provider using a query object.
+     *
+     * @param null $name
+     * @param AbstractQuery $query
+     *
+     * @return AbstractProvider
+     */
+    public static function createProvider($name = null, AbstractQuery $query)
+    {
+        return new $name($query);
     }
 
     /**

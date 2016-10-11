@@ -1,5 +1,7 @@
 <?php namespace JobApis\Jobs\Client\Tests;
 
+use JobApis\Jobs\Client\Collection;
+use JobApis\Jobs\Client\Providers\AbstractProvider;
 use Mockery as m;
 use JobApis\Jobs\Client\JobsMulti;
 
@@ -229,6 +231,24 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testItCannotGetJobsByProviderWhenExceptionThrown()
+    {
+        $result = $this->client->getJobsByProvider(uniqid());
+
+        $this->assertEquals(Collection::class, get_class($result));
+        $this->assertNotNull($result->getErrors());
+    }
+
+    public function testItCanCreateProvider()
+    {
+        $provider = $this->getRandomProvider();
+        $providerName = 'JobApis\\Jobs\\Client\\Providers\\' . $provider . 'Provider';
+        $queryName = 'JobApis\\Jobs\\Client\\Queries\\'. $provider. 'Query';
+        $result = JobsMulti::createProvider($providerName, new $queryName([]));
+
+        $this->assertEquals($providerName, get_class($result));
+    }
+
     public function testItCanGetResultsFromSingleApi()
     {
         if (!getenv('REAL_CALL')) {
@@ -288,4 +308,8 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         return $property->getValue($object);
     }
 
+    private function getRandomProvider()
+    {
+        return array_rand($this->providers);
+    }
 }

@@ -6,6 +6,9 @@ All Notable changes to `jobs-multi` will be documented in this file.
 ### Added
 - Support for [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)
 
+### Fixed
+- Wrapping calls to API Provider `getJobs` methods in try/catch block, returning error collections when appropriate.
+
 ## 0.4.1 - 2016-10-06
 
 ### Fixed
