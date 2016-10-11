@@ -256,7 +256,7 @@ class JobsMulti
      *
      * @return AbstractProvider
      */
-    public static function createProvider($name = null, AbstractQuery $query)
+    public static function createProvider($name, AbstractQuery $query)
     {
         return new $name($query);
     }

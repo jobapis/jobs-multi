@@ -1,6 +1,12 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.5.1 - 2016-10-11
+
+### Fixed
+- Failing build because of argument default order.
+
+
 ## 0.5.0 - 2016-10-10
 
 ### Added
@@ -9,10 +15,12 @@ All Notable changes to `jobs-multi` will be documented in this file.
 ### Fixed
 - Wrapping calls to API Provider `getJobs` methods in try/catch block, returning error collections when appropriate.
 
+
 ## 0.4.1 - 2016-10-06
 
 ### Fixed
 - Upgrading dependencies with bug fixes.
+
 
 ## 0.4.0 - 2016-10-03
 
@@ -22,25 +30,30 @@ All Notable changes to `jobs-multi` will be documented in this file.
 ### Fixed
 - Alphabetizing calls to providers.
 
+
 ## 0.3.2 - 2016-09-25
 
 ### Removed
 - composer.lock file.
+
 
 ## 0.3.1 - 2016-09-22
 
 ### Added
 - New providers to documentation.
 
+
 ## 0.3.0 - 2016-09-22
 
 ### Added
 - Support for [Careercast](https://github.com/jobapis/jobs-careercast)
 
+
 ## 0.2.0 - 2016-09-17
 
 ### Added
 - Support for [USAJobs](https://github.com/jobapis/jobs-usajobs)
+
 
 ## 0.1.0 - 2016-09-11
 
