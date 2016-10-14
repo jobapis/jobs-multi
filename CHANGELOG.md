@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.5.2 - 2016-10-14
+
+### Fixed
+- Updating composer to fix Careerbuilder API bug.
+
 ## 0.5.1 - 2016-10-11
 
 ### Fixed

@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": ">=5.5.0",
-    "jobapis/jobs-careerbuilder": "^2.0.0",
+    "jobapis/jobs-careerbuilder": "^2.0.2",
     "jobapis/jobs-careercast": "^1.0.1",
     "jobapis/jobs-dice": "^1.0.0",
     "jobapis/jobs-github": "^1.0.0",
