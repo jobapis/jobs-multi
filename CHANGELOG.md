@@ -1,15 +1,23 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.6.0 - 2016-10-29
+
+### Added
+- Support for [Jobinventory](https://github.com/jobapis/jobs-jobinventory)
+
+
 ## 0.5.3 - 2016-10-29
 
 ### Fixed
 - Using Careerbuilder Location as Facets seems to cause issues.
 
+
 ## 0.5.2 - 2016-10-14
 
 ### Fixed
 - Updating composer to fix Careerbuilder API bug.
+
 
 ## 0.5.1 - 2016-10-11
 

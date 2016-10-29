@@ -20,6 +20,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Indeed' => [
                 'publisher' => uniqid(),
             ],
+            'Jobinventory' => [],
             'Juju' => [
                 'partnerid' => uniqid(),
             ],
@@ -105,6 +106,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Indeed':
                     $this->assertEquals($keyword, $queries[$key]->get('q'));
                     break;
+                case 'Jobinventory':
+                    $this->assertEquals($keyword, $queries[$key]->get('q'));
+                    break;
                 case 'Juju':
                     $this->assertEquals($keyword, $queries[$key]->get('k'));
                     break;
@@ -150,6 +154,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     $this->assertNotEquals(false, strpos($queries[$key]->get('query'), 'in '.$location));
                     break;
                 case 'Indeed':
+                    $this->assertEquals($location, $queries[$key]->get('l'));
+                    break;
+                case 'Jobinventory':
                     $this->assertEquals($location, $queries[$key]->get('l'));
                     break;
                 case 'Juju':
@@ -211,6 +218,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Indeed':
                     $this->assertEquals($perPage, $queries[$key]->get('limit'));
                     $this->assertEquals($startFrom, $queries[$key]->get('start'));
+                    break;
+                case 'Jobinventory':
+                    $this->assertEquals($page, $queries[$key]->get('p'));
+                    $this->assertEquals($perPage, $queries[$key]->get('limit'));
                     break;
                 case 'Juju':
                     $this->assertEquals($perPage, $queries[$key]->get('jpp'));
@@ -280,6 +291,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Dice' => [],
             'Govt' => [],
             'Github' => [],
+            'Jobinventory' => [],
         ];
         $client = new JobsMulti($providers);
         $keyword = 'engineering';

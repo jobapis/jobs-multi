@@ -25,6 +25,7 @@
     "jobapis/jobs-github": "^1.0.0",
     "jobapis/jobs-govt": "^1.0.0",
     "jobapis/jobs-indeed": "^1.0.0",
+    "jobapis/jobs-jobinventory": "^0.1.0",
     "jobapis/jobs-juju": "^2.0.0",
     "jobapis/jobs-usajobs": "^0.2.0",
     "jobapis/jobs-ziprecruiter": "^1.0.0"

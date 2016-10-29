@@ -64,6 +64,7 @@ This package currently supports the following API providers:
 - [Github](https://github.com/jobapis/jobs-github)
 - [Govt](https://github.com/jobapis/jobs-govt)
 - [Indeed](https://github.com/jobapis/jobs-indeed)
+- [Jobinventory](https://github.com/jobapis/jobs-jobinventory)
 - [Juju](https://github.com/jobapis/jobs-juju)
 - [USAJobs](https://github.com/jobapis/jobs-usajobs)
 - [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)

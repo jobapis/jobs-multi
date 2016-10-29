@@ -121,6 +121,9 @@ class JobsMulti
                 case 'Indeed':
                     $query->set('q', $keyword);
                     break;
+                case 'Jobinventory':
+                    $query->set('q', $keyword);
+                    break;
                 case 'Juju':
                     $query->set('k', $keyword);
                     break;
@@ -176,6 +179,9 @@ class JobsMulti
                 case 'Indeed':
                     $query->set('l', $location);
                     break;
+                case 'Jobinventory':
+                    $query->set('l', $location);
+                    break;
                 case 'Juju':
                     $query->set('l', $location);
                     break;
@@ -227,6 +233,10 @@ class JobsMulti
                 case 'Indeed':
                     $query->set('limit', $perPage);
                     $query->set('start', $this->getStartFrom($page, $perPage));
+                    break;
+                case 'Jobinventory':
+                    $query->set('p', $page);
+                    $query->set('limit', $perPage);
                     break;
                 case 'Juju':
                     $query->set('page', $page);
