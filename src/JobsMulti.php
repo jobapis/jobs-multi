@@ -157,8 +157,7 @@ class JobsMulti
         foreach ($this->queries as $provider => $query) {
             switch ($provider) {
                 case 'Careerbuilder':
-                    $query->set('UseFacets', 'true');
-                    $query->set('FacetCityState', $location);
+                    $query->set('Location', $location);
                     break;
                 case 'Careercast':
                     $query->set('location', $location);

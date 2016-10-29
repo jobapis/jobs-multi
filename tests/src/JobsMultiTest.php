@@ -134,8 +134,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         foreach ($this->providers as $key => $provider) {
             switch ($key) {
                 case 'Careerbuilder':
-                    $this->assertEquals('true', $queries[$key]->get('UseFacets'));
-                    $this->assertEquals($location, $queries[$key]->get('FacetCityState'));
+                    $this->assertEquals($location, $queries[$key]->get('Location'));
                     break;
                 case 'Careercast':
                     $this->assertEquals($location, $queries[$key]->get('location'));
