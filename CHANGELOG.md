@@ -1,6 +1,12 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.6.1 - 2016-11-01
+
+### Fixed
+- Updating Careerbuilder package to fix bug.
+
+
 ## 0.6.0 - 2016-10-29
 
 ### Added
