@@ -1,6 +1,12 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.7.0 - 2016-11-09
+
+### Added
+- Support for [Careerjet](https://github.com/jobapis/jobs-careerjet)
+
+
 ## 0.6.1 - 2016-11-01
 
 ### Fixed

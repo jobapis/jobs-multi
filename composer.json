@@ -21,6 +21,7 @@
     "php": ">=5.5.0",
     "jobapis/jobs-careerbuilder": "^2.0.3",
     "jobapis/jobs-careercast": "^1.0.1",
+    "jobapis/jobs-careerjet": "^0.1.0",
     "jobapis/jobs-dice": "^1.0.0",
     "jobapis/jobs-github": "^1.0.0",
     "jobapis/jobs-govt": "^1.0.0",

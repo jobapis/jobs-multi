@@ -94,6 +94,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Careercast':
                     $this->assertEquals($keyword, $queries[$key]->get('keyword'));
                     break;
+                case 'Careerjet':
+                    $this->assertEquals($keyword, $queries[$key]->get('keywords'));
+                    break;
                 case 'Dice':
                     $this->assertEquals($keyword, $queries[$key]->get('text'));
                 break;
@@ -141,6 +144,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     $this->assertEquals($location, $queries[$key]->get('Location'));
                     break;
                 case 'Careercast':
+                    $this->assertEquals($location, $queries[$key]->get('location'));
+                    break;
+                case 'Careerjet':
                     $this->assertEquals($location, $queries[$key]->get('location'));
                     break;
                 case 'Dice':
@@ -203,6 +209,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Careercast':
                     $this->assertEquals($page, $queries[$key]->get('page'));
                     $this->assertEquals($perPage, $queries[$key]->get('rows'));
+                    break;
+                case 'Careerjet':
+                    $this->assertEquals($page, $queries[$key]->get('page'));
+                    $this->assertEquals($perPage, $queries[$key]->get('pagesize'));
                     break;
                 case 'Dice':
                     $this->assertEquals($page, $queries[$key]->get('page'));

@@ -109,6 +109,9 @@ class JobsMulti
                 case 'Careercast':
                     $query->set('keyword', $keyword);
                     break;
+                case 'Careerjet':
+                    $query->set('keywords', $keyword);
+                    break;
                 case 'Dice':
                     $query->set('text', $keyword);
                     break;
@@ -165,6 +168,9 @@ class JobsMulti
                 case 'Careercast':
                     $query->set('location', $location);
                     break;
+                case 'Careerjet':
+                    $query->set('location', $location);
+                    break;
                 case 'Dice':
                     $query->set('city', $city);
                     $query->set('state', $state);
@@ -217,6 +223,10 @@ class JobsMulti
                 case 'Careercast':
                     $query->set('page', $page);
                     $query->set('rows', $perPage);
+                    break;
+                case 'Careerjet':
+                    $query->set('page', $page);
+                    $query->set('pagesize', $perPage);
                     break;
                 case 'Dice':
                     $query->set('page', $page);
