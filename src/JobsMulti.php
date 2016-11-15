@@ -121,6 +121,9 @@ class JobsMulti
                 case 'Govt':
                     $query->set('query', $keyword);
                     break;
+                case 'Ieee':
+                    $query->set('keyword', $keyword);
+                    break;
                 case 'Indeed':
                     $query->set('q', $keyword);
                     break;
@@ -182,6 +185,9 @@ class JobsMulti
                     $queryString = $query->get('query').' in '.$location;
                     $query->set('query', $queryString);
                     break;
+                case 'Ieee':
+                    $query->set('location', $location);
+                    break;
                 case 'Indeed':
                     $query->set('l', $location);
                     break;
@@ -239,6 +245,10 @@ class JobsMulti
                 case 'Govt':
                     $query->set('size', $perPage);
                     $query->set('from', $this->getStartFrom($page, $perPage));
+                    break;
+                case 'Ieee':
+                    $query->set('page', $page);
+                    $query->set('rows', $perPage);
                     break;
                 case 'Indeed':
                     $query->set('limit', $perPage);

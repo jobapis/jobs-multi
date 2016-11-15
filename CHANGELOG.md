@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.8.0 - 2016-11-15
+
+### Added
+- Support for [IEEE JobSite](https://github.com/jobapis/jobs-ieee)
+
 ## 0.7.0 - 2016-11-09
 
 ### Added

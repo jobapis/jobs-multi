@@ -17,6 +17,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Dice' => [],
             'Github' => [],
             'Govt' => [],
+            'Ieee' => [],
             'Indeed' => [
                 'publisher' => uniqid(),
             ],
@@ -106,6 +107,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Govt':
                     $this->assertEquals($keyword, $queries[$key]->get('query'));
                 break;
+                case 'Ieee':
+                    $this->assertEquals($keyword, $queries[$key]->get('keyword'));
+                    break;
                 case 'Indeed':
                     $this->assertEquals($keyword, $queries[$key]->get('q'));
                     break;
@@ -158,6 +162,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     break;
                 case 'Govt':
                     $this->assertNotEquals(false, strpos($queries[$key]->get('query'), 'in '.$location));
+                    break;
+                case 'Ieee':
+                    $this->assertEquals($location, $queries[$key]->get('location'));
                     break;
                 case 'Indeed':
                     $this->assertEquals($location, $queries[$key]->get('l'));
@@ -224,6 +231,10 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Govt':
                     $this->assertEquals($perPage, $queries[$key]->get('size'));
                     $this->assertEquals($startFrom, $queries[$key]->get('from'));
+                    break;
+                case 'Ieee':
+                    $this->assertEquals($page, $queries[$key]->get('page'));
+                    $this->assertEquals($perPage, $queries[$key]->get('rows'));
                     break;
                 case 'Indeed':
                     $this->assertEquals($perPage, $queries[$key]->get('limit'));
