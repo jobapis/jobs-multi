@@ -156,34 +156,51 @@ class JobsMulti
     }
 
     /**
+     * Gets an array of options from a translator array
+     *
+     * @param array $translator
+     *
+     * @return array
+     */
+    protected function getOptionsFromTranslator($translator = [])
+    {
+        $options = [];
+        foreach($translator as $standardKey => $providerKey) {
+            $options[$providerKey] = $this->{$standardKey};
+        }
+        return $options;
+    }
+
+    /**
      * Gets the options array based on the provider name.
      *
      * @param $name
      *
      * @return array
      */
-    protected function getOptionsForProvider($name)
+    protected function getTranslatorForProvider($name)
     {
         switch ($name) {
             case 'Careerbuilder':
                 return [
-                    'Keywords' => $this->keyword,
-                    'Location' => $this->location,
+                    'keyword' => 'Keywords',
+                    'location' => 'Location',
                 ];
                 break;
             case 'Careercast':
                 return [
-                    'keyword' => $this->keyword,
-                    'location' => $this->location,
+                    'keyword' => 'keyword',
+                    'location' => 'location',
                 ];
                 break;
             case 'Careerjet':
                 return [
-                    'keywords' => $this->keyword,
-                    'location' => $this->location,
+                    'keyword' => 'keywords',
+                    'location' => 'location',
                 ];
                 break;
             case 'Dice':
+                /*
                 // Break down location by city and state
                 $locationArr = explode(', ', $this->location);
                 return [
@@ -191,60 +208,64 @@ class JobsMulti
                     'city' => $locationArr[0],
                     'state' => $locationArr[1],
                 ];
+                */
+                return [];
                 break;
             case 'Github':
                 return [
-                    'search' => $this->keyword,
-                    'location' => $this->location,
+                    'keyword' => 'search',
+                    'location' => 'location',
                 ];
                 break;
             case 'Govt':
+                /*
                 // Create a query string with keyword and location
                 $queryString = $this->keyword.' in '.$this->location;
                 return [
                     'query' => $queryString,
                 ];
+                */
                 break;
             case 'Ieee':
                 return [
-                    'keyword' => $this->keyword,
-                    'location' => $this->location,
+                    'keyword' => 'keyword',
+                    'location' => 'location',
                 ];
                 break;
             case 'Indeed':
                 return [
-                    'q' => $this->keyword,
-                    'l' => $this->location,
+                    'keyword' => 'q',
+                    'location' => 'l',
                 ];
                 break;
             case 'Jobinventory':
                 return [
-                    'q' => $this->keyword,
-                    'l' => $this->location,
+                    'keyword' => 'q',
+                    'location' => 'l',
                 ];
                 break;
             case 'Juju':
                 return [
-                    'k' => $this->keyword,
-                    'l' => $this->location,
+                    'keyword' => 'k',
+                    'location' => 'l',
                 ];
                 break;
             case 'Stackoverflow':
                 return [
-                    'q' => $this->keyword,
-                    'l' => $this->location,
+                    'keyword' => 'q',
+                    'location' => 'l',
                 ];
                 break;
             case 'Usajobs':
                 return [
-                    'Keyword' => $this->keyword,
-                    'LocationName' => $this->location,
+                    'keyword' => 'Keyword',
+                    'location' => 'LocationName',
                 ];
                 break;
             case 'Ziprecruiter':
                 return [
-                    'search' => $this->keyword,
-                    'location' => $this->location,
+                    'keyword' => 'search',
+                    'location' => 'location',
                 ];
                 break;
             default:
@@ -280,7 +301,7 @@ class JobsMulti
 
         $options = array_merge(
             $this->providers[$name],
-            $this->getOptionsForProvider($name)
+            $this->getOptionsFromTranslator($this->getTranslatorForProvider($name))
         );
 
         return new $path($options);

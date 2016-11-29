@@ -321,15 +321,17 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
         $providers = [
             'Dice' => [],
-            'Govt' => [],
             'Github' => [],
+            'Govt' => [],
+            'Ieee' => [],
             'Jobinventory' => [],
+            'Stackoverflow' => [],
         ];
         $client = new JobsMulti($providers);
         $keyword = 'engineering';
 
         $client->setKeyword($keyword)
-            ->setLocation('Chicago, IL')
+            // ->setLocation('Chicago, IL')
             ->setPage(1, 10);
 
         $jobs = $client->getAllJobs();
