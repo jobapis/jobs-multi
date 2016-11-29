@@ -167,7 +167,10 @@ class JobsMulti
         $options = [];
         foreach ($translator as $standardKey => $providerKey) {
             if (method_exists($this, $providerKey)) {
-                $this->$providerKey($this->{$standardKey});
+                $options = array_merge(
+                    $options,
+                    $this->$providerKey($this->{$standardKey})
+                );
             } else {
                 $options[$providerKey] = $this->{$standardKey};
             }

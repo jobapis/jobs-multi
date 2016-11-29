@@ -111,15 +111,29 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('REAL_CALL not set. Real API calls will not be made.');
         }
 
-        $keyword = 'engineering';
         $providers = [
-            'Dice' => [],
+            'Dice',
+            'Github',
+            'Govt',
+            'Ieee',
+            'Jobinventory',
+            'Stackoverflow',
         ];
-        $client = new JobsMulti($providers);
 
-        $client->setKeyword($keyword);
+        $keyword = 'engineer';
+        $location = 'New York, NY';
+        $pageNumber = 1;
+        $perPage = 10;
 
-        $results = $client->getJobsByProvider('Dice');
+        $provider = $providers[array_rand($providers)];
+
+        $client = new JobsMulti([$provider => []]);
+
+        $client->setKeyword($keyword)
+            ->setLocation($location)
+            ->setPage($pageNumber, $perPage);
+
+        $results = $client->getJobsByProvider($provider);
 
         $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
         foreach($results as $job) {
