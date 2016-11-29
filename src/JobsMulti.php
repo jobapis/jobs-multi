@@ -165,7 +165,7 @@ class JobsMulti
     protected function getOptionsFromTranslator($translator = [])
     {
         $options = [];
-        foreach($translator as $standardKey => $providerKey) {
+        foreach ($translator as $standardKey => $providerKey) {
             if (method_exists($this, $providerKey)) {
                 $this->$providerKey($this->{$standardKey});
             } else {
@@ -189,77 +189,101 @@ class JobsMulti
                 return [
                     'keyword' => 'Keywords',
                     'location' => 'Location',
+                    'pageNumber' => 'PageNumber',
+                    'perPage' => 'PerPage',
                 ];
                 break;
             case 'Careercast':
                 return [
                     'keyword' => 'keyword',
                     'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'rows',
                 ];
                 break;
             case 'Careerjet':
                 return [
                     'keyword' => 'keywords',
                     'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'pagesize',
                 ];
                 break;
             case 'Dice':
                 return [
                     'keyword' => 'text',
                     'location' => 'getCityAndState',
+                    'pageNumber' => 'page',
+                    'perPage' => 'pgcnt',
                 ];
                 break;
             case 'Github':
                 return [
                     'keyword' => 'search',
                     'location' => 'location',
+                    'pageNumber' => 'getPageMinusOne',
                 ];
                 break;
             case 'Govt':
                 return [
                     'keyword' => 'getQueryWithKeywordAndLocation',
+                    'pageNumber' => 'getFrom',
+                    'perPage' => 'size',
                 ];
                 break;
             case 'Ieee':
                 return [
                     'keyword' => 'keyword',
                     'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'rows',
                 ];
                 break;
             case 'Indeed':
                 return [
                     'keyword' => 'q',
                     'location' => 'l',
+                    'pageNumber' => 'getStart',
+                    'perPage' => 'limit',
                 ];
                 break;
             case 'Jobinventory':
                 return [
                     'keyword' => 'q',
                     'location' => 'l',
+                    'pageNumber' => 'p',
+                    'perPage' => 'limit',
                 ];
                 break;
             case 'Juju':
                 return [
                     'keyword' => 'k',
                     'location' => 'l',
+                    'pageNumber' => 'page',
+                    'perPage' => 'jpp',
                 ];
                 break;
             case 'Stackoverflow':
                 return [
                     'keyword' => 'q',
                     'location' => 'l',
+                    'pageNumber' => 'pg',
                 ];
                 break;
             case 'Usajobs':
                 return [
                     'keyword' => 'Keyword',
                     'location' => 'LocationName',
+                    'pageNumber' => 'Page',
+                    'perPage' => 'ResultsPerPage',
                 ];
                 break;
             case 'Ziprecruiter':
                 return [
                     'keyword' => 'search',
                     'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'jobs_per_page',
                 ];
                 break;
             default:
@@ -302,16 +326,96 @@ class JobsMulti
     }
 
     /**
-     * Gets a start from count for APIs that use per_page and start_from pattern.
+     * Get the city and state as an array from a location string.
      *
-     * @param int $page
-     * @param int $perPage
-     *
-     * @return int
+     * @return array
      */
-    private function getStartFrom($page = 1, $perPage = 10)
+    private function getCityAndState()
     {
-        return ($page * $perPage) - $perPage;
+        if ($this->location) {
+            $locationArr = explode(', ', $this->location);
+            return [
+                'city' => $locationArr[0],
+                'state' => $locationArr[1],
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Gets a from value.
+     *
+     * @return array
+     */
+    private function getFrom()
+    {
+        if ($this->pageNumber && $this->perPage) {
+            return [
+                'from' => ($this->pageNumber * $this->perPage) - $this->perPage,
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Gets page number minus 1.
+     *
+     * @return array
+     */
+    private function getPageMinusOne()
+    {
+        if ($this->pageNumber) {
+            return [
+                'page' => $this->pageNumber - 1,
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Get the provider name from the method.
+     *
+     * @param $method
+     *
+     * @return string
+     */
+    private function getProviderFromMethod($method)
+    {
+        preg_match('/(get)(.*?)(Jobs)/', $method, $matches);
+        return $matches[2];
+    }
+
+    /**
+     * Get the query with keyword and location.
+     *
+     * @return array
+     */
+    private function getQueryWithKeywordAndLocation()
+    {
+        $queryString = $this->keyword;
+
+        if ($this->location) {
+            $queryString .= ' in '.$this->location;
+        }
+
+        return [
+            'query' => $queryString,
+        ];
+    }
+
+    /**
+     * Gets a start at value.
+     *
+     * @return array
+     */
+    private function getStart()
+    {
+        if ($this->pageNumber && $this->perPage) {
+            return [
+                'start' => ($this->pageNumber * $this->perPage) - $this->perPage,
+            ];
+        }
+        return [];
     }
 
     /**
@@ -337,53 +441,5 @@ class JobsMulti
     private function isGetJobsByProviderMethod($method)
     {
         return preg_match('/(get)(.*?)(Jobs)/', $method, $matches) && $matches[2] && isset($this->queries[$matches[2]]);
-    }
-
-    /**
-     * Get the provider name from the method.
-     *
-     * @param $method
-     *
-     * @return string
-     */
-    private function getProviderFromMethod($method)
-    {
-        preg_match('/(get)(.*?)(Jobs)/', $method, $matches);
-        return $matches[2];
-    }
-
-    /**
-     * Get the city and state as an array from a location string.
-     *
-     * @return array
-     */
-    private function getCityAndState()
-    {
-        if ($this->location) {
-            $locationArr = explode(', ', $this->location);
-            return [
-                'city' => $locationArr[0],
-                'state' => $locationArr[1],
-            ];
-        }
-        return [];
-    }
-
-    /**
-     * Get the query with keyword and location.
-     *
-     * @return array
-     */
-    private function getQueryWithKeywordAndLocation()
-    {
-        $queryString = $this->keyword;
-
-        if ($this->location) {
-            $queryString .= ' in '.$this->location;
-        }
-
-        return [
-            'query' => $queryString,
-        ];
     }
 }
