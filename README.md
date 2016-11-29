@@ -19,15 +19,21 @@ $providers = [
         'DeveloperKey' => '<YOUR DEVELOPER KEY>',
     ],
     'Careercast' => [],
+    'Careerjet' => [
+        'affid' => '<YOUR AFFILIATE ID>',
+    ],
     'Dice' => [],
     'Github' => [],
     'Govt' => [],
+    'Ieee' => [],
     'Indeed' => [
         'publisher' => '<YOUR PUBLISHER ID>',
     ],
+    'Jobinventory' => [],
     'Juju' => [
         'partnerid' => '<YOUR PARTNER ID>',
     ],
+    'Stackoverflow' => [],
     'Usajobs' => [
         'AuthorizationKey' => '<YOUR API KEY>',
     ],
@@ -60,12 +66,15 @@ This package currently supports the following API providers:
 
 - [Careerbuilder](https://github.com/jobapis/jobs-careerbuilder)
 - [Careercast](https://github.com/jobapis/jobs-careercast)
+- [Careerjet](https://github.com/jobapis/jobs-careerjet)
 - [Dice](https://github.com/jobapis/jobs-dice)
 - [Github](https://github.com/jobapis/jobs-github)
 - [Govt](https://github.com/jobapis/jobs-govt)
+- [IEEE](https://github.com/jobapis/jobs-ieee)
 - [Indeed](https://github.com/jobapis/jobs-indeed)
 - [Jobinventory](https://github.com/jobapis/jobs-jobinventory)
 - [Juju](https://github.com/jobapis/jobs-juju)
+- [Stack Overflow](https://github.com/jobapis/jobs-stackoverflow)
 - [USAJobs](https://github.com/jobapis/jobs-usajobs)
 - [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)
 

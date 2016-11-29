@@ -133,6 +133,9 @@ class JobsMulti
                 case 'Juju':
                     $query->set('k', $keyword);
                     break;
+                case 'Stackoverflow':
+                    $query->set('q', $keyword);
+                    break;
                 case 'Usajobs':
                     $query->set('Keyword', $keyword);
                     break;
@@ -195,6 +198,9 @@ class JobsMulti
                     $query->set('l', $location);
                     break;
                 case 'Juju':
+                    $query->set('l', $location);
+                    break;
+                case 'Stackoverflow':
                     $query->set('l', $location);
                     break;
                 case 'Usajobs':
@@ -261,6 +267,10 @@ class JobsMulti
                 case 'Juju':
                     $query->set('page', $page);
                     $query->set('jpp', $perPage);
+                    break;
+                case 'Stackoverflow':
+                    $query->set('pg', $page);
+                    // No per_page option
                     break;
                 case 'Usajobs':
                     $query->set('Page', $page);

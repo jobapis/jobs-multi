@@ -1,6 +1,14 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 0.9.0 - 2016-11-29
+
+### Added
+- Support for [Stack Overflow Jobs](https://github.com/jobapis/jobs-stackoverflow)
+
+### Fixed
+- Updated list of providers in readme
+
 ## 0.8.0 - 2016-11-15
 
 ### Added

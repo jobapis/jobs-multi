@@ -119,6 +119,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Juju':
                     $this->assertEquals($keyword, $queries[$key]->get('k'));
                     break;
+                case 'Stackoverflow':
+                    $this->assertEquals($keyword, $queries[$key]->get('q'));
+                    break;
                 case 'Usajobs':
                     $this->assertEquals($keyword, $queries[$key]->get('Keyword'));
                     break;
@@ -173,6 +176,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                     $this->assertEquals($location, $queries[$key]->get('l'));
                     break;
                 case 'Juju':
+                    $this->assertEquals($location, $queries[$key]->get('l'));
+                    break;
+                case 'Stackoverflow':
                     $this->assertEquals($location, $queries[$key]->get('l'));
                     break;
                 case 'Usajobs':
@@ -247,6 +253,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 case 'Juju':
                     $this->assertEquals($perPage, $queries[$key]->get('jpp'));
                     $this->assertEquals($page, $queries[$key]->get('page'));
+                    break;
+                case 'Stackoverflow':
+                    $this->assertEquals($page, $queries[$key]->get('pg'));
                     break;
                 case 'Usajobs':
                     $this->assertEquals($page, $queries[$key]->get('Page'));
