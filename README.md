@@ -51,8 +51,8 @@ $client->setKeyword('training')
     ->setPage(1, 10);
 
 // Make queries to each individually
-$indeedJobs = $client->getIndeedJobs();
-$diceJobs = $client->getDiceJobs();
+$indeedJobs = $client->getJobsByProvider('Indeed');
+$diceJobs = $client->getJobsByProvider('Dice');
 
 // Or get an array with results from all the providers at once
 $jobs = $client->getAllJobs();

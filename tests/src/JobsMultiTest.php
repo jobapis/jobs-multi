@@ -1,7 +1,6 @@
 <?php namespace JobApis\Jobs\Client\Tests;
 
 use JobApis\Jobs\Client\Collection;
-use JobApis\Jobs\Client\Providers\AbstractProvider;
 use Mockery as m;
 use JobApis\Jobs\Client\JobsMulti;
 
@@ -311,6 +310,9 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group real
+     */
     public function testItCanGetAllResultsFromApis()
     {
         if (!getenv('REAL_CALL')) {
@@ -331,6 +333,8 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             ->setPage(1, 10);
 
         $jobs = $client->getAllJobs();
+
+        var_dump($jobs); exit;
 
         foreach ($jobs as $provider => $results) {
             $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
