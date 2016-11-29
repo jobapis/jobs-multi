@@ -166,7 +166,11 @@ class JobsMulti
     {
         $options = [];
         foreach($translator as $standardKey => $providerKey) {
-            $options[$providerKey] = $this->{$standardKey};
+            if (method_exists($this, $providerKey)) {
+                $this->$providerKey($this->{$standardKey});
+            } else {
+                $options[$providerKey] = $this->{$standardKey};
+            }
         }
         return $options;
     }
@@ -200,16 +204,10 @@ class JobsMulti
                 ];
                 break;
             case 'Dice':
-                /*
-                // Break down location by city and state
-                $locationArr = explode(', ', $this->location);
                 return [
-                    'text' => $this->keyword,
-                    'city' => $locationArr[0],
-                    'state' => $locationArr[1],
+                    'keyword' => 'text',
+                    'location' => 'getCityAndState',
                 ];
-                */
-                return [];
                 break;
             case 'Github':
                 return [
@@ -218,13 +216,9 @@ class JobsMulti
                 ];
                 break;
             case 'Govt':
-                /*
-                // Create a query string with keyword and location
-                $queryString = $this->keyword.' in '.$this->location;
                 return [
-                    'query' => $queryString,
+                    'keyword' => 'getQueryWithKeywordAndLocation',
                 ];
-                */
                 break;
             case 'Ieee':
                 return [
@@ -356,5 +350,40 @@ class JobsMulti
     {
         preg_match('/(get)(.*?)(Jobs)/', $method, $matches);
         return $matches[2];
+    }
+
+    /**
+     * Get the city and state as an array from a location string.
+     *
+     * @return array
+     */
+    private function getCityAndState()
+    {
+        if ($this->location) {
+            $locationArr = explode(', ', $this->location);
+            return [
+                'city' => $locationArr[0],
+                'state' => $locationArr[1],
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Get the query with keyword and location.
+     *
+     * @return array
+     */
+    private function getQueryWithKeywordAndLocation()
+    {
+        $queryString = $this->keyword;
+
+        if ($this->location) {
+            $queryString .= ' in '.$this->location;
+        }
+
+        return [
+            'query' => $queryString,
+        ];
     }
 }
