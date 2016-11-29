@@ -39,6 +39,55 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         $this->client = new JobsMulti($this->providers);
     }
 
+    public function testItCanSetProviders()
+    {
+        $providers = [
+            uniqid() => uniqid(),
+        ];
+
+        $this->client->setProviders($providers);
+
+        $results = $this->getProtectedProperty($this->client, 'providers');
+
+        $this->assertEquals($providers, $results);
+    }
+
+    public function testItCanSetKeyword()
+    {
+        $keyword = uniqid();
+
+        $this->client->setKeyword($keyword);
+
+        $result = $this->getProtectedProperty($this->client, 'keyword');
+
+        $this->assertEquals($keyword, $result);
+    }
+
+    public function testItCanSetLocation()
+    {
+        $location = uniqid().', ST';
+
+        $this->client->setLocation($location);
+
+        $result = $this->getProtectedProperty($this->client, 'location');
+
+        $this->assertEquals($location, $result);
+    }
+
+    public function testItCanSetPageDetails()
+    {
+        $pageNumber = rand(1, 100);
+        $perPage = rand(1, 100);
+
+        $this->client->setPage($pageNumber, $perPage);
+
+        $resultPageNumber = $this->getProtectedProperty($this->client, 'pageNumber');
+        $resultPerPage = $this->getProtectedProperty($this->client, 'perPage');
+
+        $this->assertEquals($pageNumber, $resultPageNumber);
+        $this->assertEquals($perPage, $resultPerPage);
+    }
+
     /**
      * @expectedException \OutOfBoundsException
      */

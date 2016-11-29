@@ -66,7 +66,7 @@ class JobsMulti
     {
         $jobs = [];
         foreach ($this->providers as $providerName => $options) {
-            $jobs[$providerName] = $this->getJobsByProvider($providerName);
+            $jobs[$providerName] = $this->getJobsByProvider($providerName, $options);
         }
         return $jobs;
     }
@@ -78,7 +78,7 @@ class JobsMulti
      *
      * @return \JobApis\Jobs\Client\Collection
      */
-    public function getJobsByProvider($name = null)
+    public function getJobsByProvider($name = null, $options = [])
     {
         try {
             // Instantiate the query with all our parameters
