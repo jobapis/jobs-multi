@@ -20,6 +20,34 @@ class JobsMulti
     protected $location;
 
     /**
+     * Maximum age of results (in days)
+     *
+     * @var integer
+     */
+    protected $maxAge;
+
+    /**
+     * Maximum number of results to return in all results
+     *
+     * @var integer
+     */
+    protected $maxResults;
+
+    /**
+     * Order of results
+     *
+     * @var string
+     */
+    protected $order = 'desc';
+
+    /**
+     * Field to order results by
+     *
+     * @var string
+     */
+    protected $orderBy = 'datePosted';
+
+    /**
      * Results page number
      *
      * @var integer
@@ -58,17 +86,39 @@ class JobsMulti
     }
 
     /**
-     * Gets jobs from all providers in a single go and returns an array of Collection objects.
+     * Gets jobs from all providers in a single go and returns a MultiCollection
      *
-     * @return array
+     * @return Collection
      */
     public function getAllJobs($options = [])
     {
-        $jobs = [];
+        // Set options that are passed in
+        $this->options = $this->setOptions($options);
+
+        // Create a new MultiCollection
+        $collection = new MultiCollection();
         foreach ($this->providers as $providerName => $options) {
-            $jobs[$providerName] = $this->getJobsByProvider($providerName, $options);
+            $collection->addItems($this->getJobsByProvider($providerName, $options));
         }
-        return $jobs;
+
+        // Order the results
+        $collection->orderBy($this->orderBy, $this->order);
+
+        // Filter older listings out
+        if ($this->maxAge) {
+            $collection->filter(
+                'datePosted',
+                new \DateTime($this->maxAge.' days ago'),
+                '>'
+            );
+        }
+
+        // Truncate to the maximum results (all by default)
+        if ($this->maxResults) {
+            $collection->truncate($this->maxResults);
+        }
+
+        return $collection;
     }
 
     /**
@@ -78,7 +128,7 @@ class JobsMulti
      *
      * @return \JobApis\Jobs\Client\Collection
      */
-    public function getJobsByProvider($name = null, $options = [])
+    public function getJobsByProvider($name = null)
     {
         try {
             // Instantiate the query with all our parameters
@@ -121,6 +171,31 @@ class JobsMulti
             throw new \OutOfBoundsException("Location parameter must follow the pattern 'City, ST'.");
         }
         $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Sets the options used for the resulting collection
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setOptions($options = [])
+    {
+        if (isset($options['maxAge'])) {
+            $this->maxAge = $options['maxAge'];
+        }
+        if (isset($options['maxResults'])) {
+            $this->maxResults = $options['maxResults'];
+        }
+        if (isset($options['order'])) {
+            $this->order = $options['order'];
+        }
+        if (isset($options['orderBy'])) {
+            $this->orderBy = $options['orderBy'];
+        }
 
         return $this;
     }

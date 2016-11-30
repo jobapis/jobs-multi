@@ -160,16 +160,15 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
         $client->setKeyword($keyword)
             ->setLocation('Chicago, IL')
-            ->setPage(1, 10);
+            ->setPage(1, 2);
 
-        $jobs = $client->getAllJobs();
+        $results = $client->getAllJobs();
 
-        foreach ($jobs as $provider => $results) {
-            $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
-            foreach($results as $job) {
-                $this->assertEquals($keyword, $job->query);
-            }
+        $this->assertInstanceOf('JobApis\Jobs\Client\MultiCollection', $results);
+        foreach($results as $job) {
+            $this->assertEquals($keyword, $job->query);
         }
+        echo json_encode($results->all());
     }
 
     private function getProtectedProperty($object, $property = null)
