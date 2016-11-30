@@ -88,7 +88,7 @@ class JobsMulti
     /**
      * Gets jobs from all providers in a single go and returns a MultiCollection
      *
-     * @return Collection
+     * @return MultiCollection
      */
     public function getAllJobs($options = [])
     {
@@ -98,7 +98,7 @@ class JobsMulti
         // Create a new MultiCollection
         $collection = new MultiCollection();
         foreach ($this->providers as $providerName => $options) {
-            $collection->addItems($this->getJobsByProvider($providerName, $options));
+            $collection->append($this->getJobsByProvider($providerName));
         }
 
         // Order the results

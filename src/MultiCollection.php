@@ -9,7 +9,7 @@ class MultiCollection extends Collection
      *
      * @return $this
      */
-    public function addItems(Collection $collection)
+    public function append(Collection $collection)
     {
         // If there are jobs, add them to the collection
         if ($collection->count()) {
@@ -41,6 +41,9 @@ class MultiCollection extends Collection
         $this->items = array_filter(
             $this->items,
             function ($item) use ($field, $value, $operator) {
+                if (!isset($item->{$field})) {
+                    throw new \Exception("Property not defined.");
+                }
                 if ($operator == '>') {
                     return $item->{$field} > $value;
                 } elseif ($operator == '<') {

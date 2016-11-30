@@ -168,7 +168,6 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         foreach($results as $job) {
             $this->assertEquals($keyword, $job->query);
         }
-        echo json_encode($results->all());
     }
 
     private function getProtectedProperty($object, $property = null)
