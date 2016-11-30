@@ -68,17 +68,21 @@ class MultiCollection extends Collection
      */
     public function orderBy($orderBy, $order = 'desc')
     {
-        // Order by date
         usort(
             $this->items,
             function ($item1, $item2) use ($orderBy, $order) {
+                if (!isset($item1->{$orderBy}) || !isset($item2->{$orderBy})) {
+                    throw new \Exception("Property not defined.");
+                }
+                // If the two items are equal, return 0
                 if ($item1->{$orderBy} == $item2->{$orderBy}) {
                     return 0;
                 }
-
+                // If ascending, test whether Item 1 is less than Item 2
                 if ($order === 'asc') {
                     return $item1->{$orderBy} < $item2->{$orderBy} ? -1 : 1;
                 }
+                // Else assuming descending.
                 return $item1->{$orderBy} > $item2->{$orderBy} ? -1 : 1;
             }
         );
