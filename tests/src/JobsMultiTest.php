@@ -168,7 +168,40 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanGetResultsFromSingleApiWithOptions()
     {
-        $this->markTestIncomplete("WIP");
+        $providers = [
+            'Dice',
+            'Github',
+            'Govt',
+            'Ieee',
+            'Jobinventory',
+            'Stackoverflow',
+        ];
+
+        $keyword = 'engineer';
+        $options = [
+            'maxAge' => rand(1, 180),
+            'maxResults' => rand(1, 25),
+            'orderBy' => 'datePosted',
+            'order' => 'desc',
+        ];
+
+        $provider = $providers[array_rand($providers)];
+
+        $client = new JobsMulti([$provider => []]);
+
+        $results = $client->setKeyword($keyword)
+            ->getJobsByProvider($provider, $options);
+
+        $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
+        $this->assertLessThanOrEqual($options['maxResults'], $results->count());
+        $previousJob = null;
+        foreach($results as $job) {
+            $this->assertEquals($keyword, $job->query);
+            if ($previousJob) {
+                $this->assertLessThanOrEqual($job->datePosted, $previousJob->datePosted);
+            }
+            $previousJob = $job;
+        }
     }
 
     public function testItCanGetAllResultsFromApis()
@@ -194,11 +227,6 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         foreach($results as $job) {
             $this->assertEquals($keyword, $job->query);
         }
-    }
-
-    public function testItCanGetAllResultsFromApisWithOptions()
-    {
-        $this->markTestIncomplete("WIP");
     }
 
     private function getProtectedProperty($object, $property = null)
