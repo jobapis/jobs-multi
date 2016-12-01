@@ -12,6 +12,8 @@ Each client on its own will give you more flexibility and access to all the para
 
 ## Usage
 
+JobsMulti allows you to easily retrieve job listings from many job boards with one library and just a few lines of code. Here is a brief overview of what you can do:
+
 ```php
 // Include as many or as few providers as you want. Just be sure to include any required keys.
 $providers = [
@@ -52,10 +54,18 @@ $client->setKeyword('training')
 
 // Make queries to each individually
 $indeedJobs = $client->getJobsByProvider('Indeed');
-$diceJobs = $client->getJobsByProvider('Dice');
+
+// And include an array of options if you'd like
+$options = [
+    'maxAge' => 30              // Maximum age (in days) of listings
+    'maxResults' => 100         // Maximum number of results
+    'orderBy' => 'datePosted'   // Field to order results by
+    'order' => 'desc'           // Order ('asc' or 'desc')
+];
+$diceJobs = $client->getJobsByProvider('Dice', $options);
 
 // Or get an array with results from all the providers at once
-$jobs = $client->getAllJobs();
+$jobs = $client->getAllJobs($options);
 ```
 
 The `getJobsByProvider` and the `getAllJobs` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) containing many [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
