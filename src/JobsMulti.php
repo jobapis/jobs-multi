@@ -38,14 +38,14 @@ class JobsMulti
      *
      * @var string
      */
-    protected $order = 'desc';
+    protected $order;
 
     /**
      * Field to order results by
      *
      * @var string
      */
-    protected $orderBy = 'datePosted';
+    protected $orderBy;
 
     /**
      * Results page number
@@ -88,37 +88,21 @@ class JobsMulti
     /**
      * Gets jobs from all providers in a single go and returns a MultiCollection
      *
-     * @return MultiCollection
+     * @return Collection
      */
     public function getAllJobs($options = [])
     {
         // Set options that are passed in
-        $this->options = $this->setOptions($options);
+        $this->setOptions($options);
 
-        // Create a new MultiCollection
-        $collection = new MultiCollection();
+        // Create a new Collection
+        $collection = new Collection();
         foreach ($this->providers as $providerName => $options) {
-            $collection->append($this->getJobsByProvider($providerName));
+            $collection->addCollection($this->getJobsByProvider($providerName));
         }
 
-        // Order the results
-        $collection->orderBy($this->orderBy, $this->order);
-
-        // Filter older listings out
-        if ($this->maxAge) {
-            $collection->filter(
-                'datePosted',
-                new \DateTime($this->maxAge.' days ago'),
-                '>'
-            );
-        }
-
-        // Truncate to the maximum results (all by default)
-        if ($this->maxResults) {
-            $collection->truncate($this->maxResults);
-        }
-
-        return $collection;
+        // Apply sorting and ordering options and return the collection
+        return $this->applyOptions($collection);
     }
 
     /**
@@ -128,8 +112,11 @@ class JobsMulti
      *
      * @return \JobApis\Jobs\Client\Collection
      */
-    public function getJobsByProvider($name = null)
+    public function getJobsByProvider($name = null, $options = [])
     {
+        // Set options that are passed in
+        $this->setOptions($options);
+
         try {
             // Instantiate the query with all our parameters
             $query = $this->instantiateQuery($name);
@@ -137,8 +124,8 @@ class JobsMulti
             // Instantiate the provider
             $provider = $this->instantiateProvider($name, $query);
 
-            // Get the jobs and return a collection
-            return $provider->getJobs();
+            // Apply sorting and ordering options and return the collection
+            return $this->applyOptions($provider->getJobs());
         } catch (\Exception $e) {
             return (new Collection())->addError($e->getMessage());
         }
@@ -228,6 +215,37 @@ class JobsMulti
         $this->providers = $providers;
 
         return $this;
+    }
+
+    /**
+     * Apply the options for this JobsMulti object to the Collection
+     *
+     * @param Collection $collection
+     *
+     * @return Collection
+     */
+    protected function applyOptions(Collection $collection)
+    {
+        // Order the results
+        if ($this->orderBy && $this->order) {
+            $collection->orderBy($this->orderBy, $this->order);
+        }
+
+        // Filter older listings out
+        if ($this->maxAge) {
+            $collection->filter(
+                'datePosted',
+                new \DateTime($this->maxAge.' days ago'),
+                '>'
+            );
+        }
+
+        // Truncate to the maximum results (all by default)
+        if ($this->maxResults) {
+            $collection->truncate($this->maxResults);
+        }
+
+        return $collection;
     }
 
     /**

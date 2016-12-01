@@ -4,8 +4,9 @@ All Notable changes to `jobs-multi` will be documented in this file.
 ## 1.0.0 - WIP
 
 ### Added
-- New `MultiCollection` class to store results from multiple providers.
-- Options for `getAllJobs` method.
+- Requirement on `jobs-common` v2.1 for new Collection methods.
+- Options for `getAllJobs` and `getJobs` method.
+- Making integration tests run every time.
 
 ### Fixed
 - Moving query instantiation to the end of the process to prevent overwriting queries.

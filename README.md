@@ -58,21 +58,27 @@ $diceJobs = $client->getJobsByProvider('Dice');
 $jobs = $client->getAllJobs();
 ```
 
-The `getJobsByProvider` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) and the `getAllJobs` method will return a [MultiCollection](https://github.com/jobapis/jobs-multi/blob/master/src/MultiCollection.php). Both include many [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
+The `getJobsByProvider` and the `getAllJobs` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) containing many [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
 
-## Important Methods
+## Documented Methods
 
 - `setProviders($providers)` Set the providers you want to use (see example above) with default and required parameters for each.
+
 - `setKeyword($keyword)` Set the search string.
+
 - `setLocation($location)` Set the location string. Should be in the format "City, ST".
-- `setOptions($options)` Set options for `getAllJobs` method. See valid options below.
+
 - `setPage($pageNumber, $perPage)` Set the results page options.
-- `getAllJobs($options)` Get a collection of jobs from all providers set above. Options include:
-  - `maxAge` Maximum age (in days) of listings.
-  - `maxResults` Truncate the results to a certain number.
-  - `order` Sort results by `asc` or `desc`.
-  - `orderBy` Field to order results by.
-- `getJobsByProvider($provider)` Get a collection of jobs from a single provider by name. The provider must be in the array of providers.
+
+- `setOptions($options)` Set options for `getAllJobs` method. Options include:
+    - `maxAge` Maximum age (in days) of listings.
+    - `maxResults` Truncate the results to a certain number.
+    - `order` Sort results by `asc` or `desc`.
+    - `orderBy` Field to order results by, eg: `datePosted`.
+
+- `getAllJobs($options)` Get a collection of jobs from all providers set above. See `setOptions` method above for available options.
+
+- `getJobsByProvider($provider, $options)` Get a collection of jobs from a single provider by name. The provider must be in the array of providers. See `setOptions` method above for available options.
 
 ## Supported APIs
 

@@ -107,10 +107,6 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanGetResultsFromSingleApi()
     {
-        if (!getenv('REAL_CALL')) {
-            $this->markTestSkipped('REAL_CALL not set. Real API calls will not be made.');
-        }
-
         $providers = [
             'Dice',
             'Github',
@@ -143,10 +139,6 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanGetAllResultsFromApis()
     {
-        if (!getenv('REAL_CALL')) {
-            $this->markTestSkipped('REAL_CALL not set. Real API calls will not be made.');
-        }
-
         $providers = [
             'Dice' => [],
             'Github' => [],
@@ -164,7 +156,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
         $results = $client->getAllJobs();
 
-        $this->assertInstanceOf('JobApis\Jobs\Client\MultiCollection', $results);
+        $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
         foreach($results as $job) {
             $this->assertEquals($keyword, $job->query);
         }
