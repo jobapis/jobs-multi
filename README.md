@@ -58,10 +58,10 @@ $indeedJobs = $client->getJobsByProvider('Indeed');
 
 // And include an array of options if you'd like
 $options = [
-    'maxAge' => 30              // Maximum age (in days) of listings
-    'maxResults' => 100         // Maximum number of results
-    'orderBy' => 'datePosted'   // Field to order results by
-    'order' => 'desc'           // Order ('asc' or 'desc')
+    'maxAge' => 30,              // Maximum age (in days) of listings
+    'maxResults' => 100,         // Maximum number of results
+    'orderBy' => 'datePosted',   // Field to order results by
+    'order' => 'desc',           // Order ('asc' or 'desc')
 ];
 $diceJobs = $client->getJobsByProvider('Dice', $options);
 

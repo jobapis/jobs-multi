@@ -41,7 +41,31 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanSetOptions()
     {
-        $this->markTestIncomplete("WIP");
+        $options = [
+            'maxAge' => rand(1, 50),
+            'maxResults' => rand(1, 100),
+            'orderBy' => uniqid(),
+            'order' => 'asc',
+        ];
+
+        $this->client->setOptions($options);
+
+        $this->assertEquals(
+            $options['maxAge'],
+            $this->getProtectedProperty($this->client, 'maxAge')
+        );
+        $this->assertEquals(
+            $options['maxResults'],
+            $this->getProtectedProperty($this->client, 'maxResults')
+        );
+        $this->assertEquals(
+            $options['orderBy'],
+            $this->getProtectedProperty($this->client, 'orderBy')
+        );
+        $this->assertEquals(
+            $options['order'],
+            $this->getProtectedProperty($this->client, 'order')
+        );
     }
 
     public function testItCanSetProviders()

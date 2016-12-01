@@ -10,6 +10,7 @@ All Notable changes to `jobs-multi` will be documented in this file.
 
 ### Fixed
 - Moving query instantiation to the end of the process to prevent overwriting queries.
+- Improved test coverage.
 
 ### Removed
 - `Get<Provider>Jobs` Method. Now you must use `getJobsByProvider` or `getAllJobs`.
