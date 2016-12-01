@@ -1,12 +1,16 @@
 <?php namespace JobApis\Jobs\Client\Tests;
 
 use JobApis\Jobs\Client\Collection;
-use JobApis\Jobs\Client\Providers\AbstractProvider;
 use Mockery as m;
 use JobApis\Jobs\Client\JobsMulti;
 
 class JobsMultiTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var JobsMulti
+     */
+    protected $client;
+
     public function setUp()
     {
         $this->providers = [
@@ -35,162 +39,82 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         $this->client = new JobsMulti($this->providers);
     }
 
-    public function testItCanInstantiateQueryObjectsWithAllProviders()
+    public function testItCanSetOptions()
     {
-        $queries = $this->getProtectedProperty($this->client, 'queries');
+        $options = [
+            'maxAge' => rand(1, 50),
+            'maxResults' => rand(1, 100),
+            'orderBy' => uniqid(),
+            'order' => 'asc',
+        ];
 
-        foreach ($this->providers as $key => $provider) {
-            $this->assertTrue(isset($queries[$key]));
-            $this->assertEquals(
-                'JobApis\\Jobs\\Client\\Queries\\'.$key.'Query',
-                get_class($queries[$key])
-            );
-        }
+        $this->client->setOptions($options);
+
+        $this->assertEquals(
+            $options['maxAge'],
+            $this->getProtectedProperty($this->client, 'maxAge')
+        );
+        $this->assertEquals(
+            $options['maxResults'],
+            $this->getProtectedProperty($this->client, 'maxResults')
+        );
+        $this->assertEquals(
+            $options['orderBy'],
+            $this->getProtectedProperty($this->client, 'orderBy')
+        );
+        $this->assertEquals(
+            $options['order'],
+            $this->getProtectedProperty($this->client, 'order')
+        );
     }
 
-    public function testItCanInstantiateQueryObjectsWithoutAllProviders()
+    public function testItCanSetProviders()
     {
         $providers = [
-            'Dice' => [],
-            'Govt' => [],
-            'Github' => [],
+            uniqid() => uniqid(),
         ];
-        $client = new JobsMulti($providers);
-        $queries = $this->getProtectedProperty($client, 'queries');
 
-        foreach ($providers as $key => $provider) {
-            $this->assertTrue(isset($queries[$key]));
-            $this->assertEquals(
-                'JobApis\\Jobs\\Client\\Queries\\'.$key.'Query',
-                get_class($queries[$key])
-            );
-        }
-        $this->assertFalse(isset($queries['careerbuilderQuery']));
-        $this->assertFalse(isset($queries['indeedQuery']));
+        $this->client->setProviders($providers);
+
+        $results = $this->getProtectedProperty($this->client, 'providers');
+
+        $this->assertEquals($providers, $results);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testItThrowsErrorOnInvalidMethodCall()
-    {
-        $method = uniqid();
-        $this->client->$method();
-    }
-
-    public function testItCanSetKeywordOnAllProviders()
+    public function testItCanSetKeyword()
     {
         $keyword = uniqid();
-        $result = $this->client->setKeyword($keyword);
 
-        $this->assertEquals(get_class($this->client), get_class($result));
+        $this->client->setKeyword($keyword);
 
-        $queries = $this->getProtectedProperty($this->client, 'queries');
+        $result = $this->getProtectedProperty($this->client, 'keyword');
 
-        foreach ($this->providers as $key => $provider) {
-            switch ($key) {
-                case 'Careerbuilder':
-                    $this->assertEquals($keyword, $queries[$key]->get('Keywords'));
-                break;
-                case 'Careercast':
-                    $this->assertEquals($keyword, $queries[$key]->get('keyword'));
-                    break;
-                case 'Careerjet':
-                    $this->assertEquals($keyword, $queries[$key]->get('keywords'));
-                    break;
-                case 'Dice':
-                    $this->assertEquals($keyword, $queries[$key]->get('text'));
-                break;
-                case 'Github':
-                    $this->assertEquals($keyword, $queries[$key]->get('search'));
-                    break;
-                case 'Govt':
-                    $this->assertEquals($keyword, $queries[$key]->get('query'));
-                break;
-                case 'Ieee':
-                    $this->assertEquals($keyword, $queries[$key]->get('keyword'));
-                    break;
-                case 'Indeed':
-                    $this->assertEquals($keyword, $queries[$key]->get('q'));
-                    break;
-                case 'Jobinventory':
-                    $this->assertEquals($keyword, $queries[$key]->get('q'));
-                    break;
-                case 'Juju':
-                    $this->assertEquals($keyword, $queries[$key]->get('k'));
-                    break;
-                case 'Stackoverflow':
-                    $this->assertEquals($keyword, $queries[$key]->get('q'));
-                    break;
-                case 'Usajobs':
-                    $this->assertEquals($keyword, $queries[$key]->get('Keyword'));
-                    break;
-                case 'Ziprecruiter':
-                    $this->assertEquals($keyword, $queries[$key]->get('search'));
-                    break;
-                default:
-                    throw new \Exception("Provider {$key} not found in test.");
-            }
-        }
+        $this->assertEquals($keyword, $result);
     }
 
-    public function testItCanSetLocationOnAllProviders()
+    public function testItCanSetLocation()
     {
-        $city = uniqid();
-        $state = 'te';
-        $location = $city.', '.$state;
-        $result = $this->client->setLocation($location);
+        $location = uniqid().', ST';
 
-        $this->assertEquals(get_class($this->client), get_class($result));
+        $this->client->setLocation($location);
 
-        $queries = $this->getProtectedProperty($this->client, 'queries');
+        $result = $this->getProtectedProperty($this->client, 'location');
 
-        foreach ($this->providers as $key => $provider) {
-            switch ($key) {
-                case 'Careerbuilder':
-                    $this->assertEquals($location, $queries[$key]->get('Location'));
-                    break;
-                case 'Careercast':
-                    $this->assertEquals($location, $queries[$key]->get('location'));
-                    break;
-                case 'Careerjet':
-                    $this->assertEquals($location, $queries[$key]->get('location'));
-                    break;
-                case 'Dice':
-                    $this->assertEquals($city, $queries[$key]->get('city'));
-                    $this->assertEquals($state, $queries[$key]->get('state'));
-                    break;
-                case 'Github':
-                    $this->assertEquals($location, $queries[$key]->get('location'));
-                    break;
-                case 'Govt':
-                    $this->assertNotEquals(false, strpos($queries[$key]->get('query'), 'in '.$location));
-                    break;
-                case 'Ieee':
-                    $this->assertEquals($location, $queries[$key]->get('location'));
-                    break;
-                case 'Indeed':
-                    $this->assertEquals($location, $queries[$key]->get('l'));
-                    break;
-                case 'Jobinventory':
-                    $this->assertEquals($location, $queries[$key]->get('l'));
-                    break;
-                case 'Juju':
-                    $this->assertEquals($location, $queries[$key]->get('l'));
-                    break;
-                case 'Stackoverflow':
-                    $this->assertEquals($location, $queries[$key]->get('l'));
-                    break;
-                case 'Usajobs':
-                    $this->assertEquals($location, $queries[$key]->get('LocationName'));
-                    break;
-                case 'Ziprecruiter':
-                    $this->assertEquals($location, $queries[$key]->get('location'));
-                    break;
-                default:
-                    throw new \Exception("Provider {$key} not found in test.");
-            }
-        }
+        $this->assertEquals($location, $result);
+    }
+
+    public function testItCanSetPageDetails()
+    {
+        $pageNumber = rand(1, 100);
+        $perPage = rand(1, 100);
+
+        $this->client->setPage($pageNumber, $perPage);
+
+        $resultPageNumber = $this->getProtectedProperty($this->client, 'pageNumber');
+        $resultPerPage = $this->getProtectedProperty($this->client, 'perPage');
+
+        $this->assertEquals($pageNumber, $resultPageNumber);
+        $this->assertEquals($perPage, $resultPerPage);
     }
 
     /**
@@ -202,75 +126,6 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         $this->client->setLocation($location);
     }
 
-    public function testItCanSetPageOnAllProviders()
-    {
-        $page = rand(1, 20);
-        $perPage = rand(1, 20);
-        $startFrom = ($page * $perPage) - $perPage;
-        $result = $this->client->setPage($page, $perPage);
-
-        $this->assertEquals(get_class($this->client), get_class($result));
-
-        $queries = $this->getProtectedProperty($this->client, 'queries');
-
-        foreach ($this->providers as $key => $provider) {
-            switch ($key) {
-                case 'Careerbuilder':
-                    $this->assertEquals($page, $queries[$key]->get('PageNumber'));
-                    $this->assertEquals($perPage, $queries[$key]->get('PerPage'));
-                    break;
-                case 'Careercast':
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('rows'));
-                    break;
-                case 'Careerjet':
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('pagesize'));
-                    break;
-                case 'Dice':
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('pgcnt'));
-                    break;
-                case 'Github':
-                    $this->assertEquals($page-1, $queries[$key]->get('page'));
-                    break;
-                case 'Govt':
-                    $this->assertEquals($perPage, $queries[$key]->get('size'));
-                    $this->assertEquals($startFrom, $queries[$key]->get('from'));
-                    break;
-                case 'Ieee':
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('rows'));
-                    break;
-                case 'Indeed':
-                    $this->assertEquals($perPage, $queries[$key]->get('limit'));
-                    $this->assertEquals($startFrom, $queries[$key]->get('start'));
-                    break;
-                case 'Jobinventory':
-                    $this->assertEquals($page, $queries[$key]->get('p'));
-                    $this->assertEquals($perPage, $queries[$key]->get('limit'));
-                    break;
-                case 'Juju':
-                    $this->assertEquals($perPage, $queries[$key]->get('jpp'));
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    break;
-                case 'Stackoverflow':
-                    $this->assertEquals($page, $queries[$key]->get('pg'));
-                    break;
-                case 'Usajobs':
-                    $this->assertEquals($page, $queries[$key]->get('Page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('ResultsPerPage'));
-                    break;
-                case 'Ziprecruiter':
-                    $this->assertEquals($page, $queries[$key]->get('page'));
-                    $this->assertEquals($perPage, $queries[$key]->get('jobs_per_page'));
-                    break;
-                default:
-                    throw new \Exception("Provider {$key} not found in test.");
-            }
-        }
-    }
-
     public function testItCannotGetJobsByProviderWhenExceptionThrown()
     {
         $result = $this->client->getJobsByProvider(uniqid());
@@ -279,31 +134,31 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($result->getErrors());
     }
 
-    public function testItCanCreateProvider()
-    {
-        $provider = $this->getRandomProvider();
-        $providerName = 'JobApis\\Jobs\\Client\\Providers\\' . $provider . 'Provider';
-        $queryName = 'JobApis\\Jobs\\Client\\Queries\\'. $provider. 'Query';
-        $result = JobsMulti::createProvider($providerName, new $queryName([]));
-
-        $this->assertEquals($providerName, get_class($result));
-    }
-
     public function testItCanGetResultsFromSingleApi()
     {
-        if (!getenv('REAL_CALL')) {
-            $this->markTestSkipped('REAL_CALL not set. Real API calls will not be made.');
-        }
-
-        $keyword = 'engineering';
         $providers = [
-            'Dice' => [],
+            'Dice',
+            'Github',
+            'Govt',
+            'Ieee',
+            'Jobinventory',
+            'Stackoverflow',
         ];
-        $client = new JobsMulti($providers);
 
-        $client->setKeyword($keyword);
+        $keyword = 'engineer';
+        $location = 'New York, NY';
+        $pageNumber = 1;
+        $perPage = 10;
 
-        $results = $client->getDiceJobs();
+        $provider = $providers[array_rand($providers)];
+
+        $client = new JobsMulti([$provider => []]);
+
+        $client->setKeyword($keyword)
+            ->setLocation($location)
+            ->setPage($pageNumber, $perPage);
+
+        $results = $client->getJobsByProvider($provider);
 
         $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
         foreach($results as $job) {
@@ -311,32 +166,66 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testItCanGetResultsFromSingleApiWithOptions()
+    {
+        $providers = [
+            'Dice',
+            'Github',
+            'Govt',
+            'Ieee',
+            'Jobinventory',
+            'Stackoverflow',
+        ];
+
+        $keyword = 'engineer';
+        $options = [
+            'maxAge' => rand(1, 180),
+            'maxResults' => rand(1, 25),
+            'orderBy' => 'datePosted',
+            'order' => 'desc',
+        ];
+
+        $provider = $providers[array_rand($providers)];
+
+        $client = new JobsMulti([$provider => []]);
+
+        $results = $client->setKeyword($keyword)
+            ->getJobsByProvider($provider, $options);
+
+        $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
+        $this->assertLessThanOrEqual($options['maxResults'], $results->count());
+        $previousJob = null;
+        foreach($results as $job) {
+            $this->assertEquals($keyword, $job->query);
+            if ($previousJob) {
+                $this->assertLessThanOrEqual($job->datePosted, $previousJob->datePosted);
+            }
+            $previousJob = $job;
+        }
+    }
+
     public function testItCanGetAllResultsFromApis()
     {
-        if (!getenv('REAL_CALL')) {
-            $this->markTestSkipped('REAL_CALL not set. Real API calls will not be made.');
-        }
-
         $providers = [
             'Dice' => [],
-            'Govt' => [],
             'Github' => [],
+            'Govt' => [],
+            'Ieee' => [],
             'Jobinventory' => [],
+            'Stackoverflow' => [],
         ];
         $client = new JobsMulti($providers);
         $keyword = 'engineering';
 
         $client->setKeyword($keyword)
             ->setLocation('Chicago, IL')
-            ->setPage(1, 10);
+            ->setPage(1, 2);
 
-        $jobs = $client->getAllJobs();
+        $results = $client->getAllJobs();
 
-        foreach ($jobs as $provider => $results) {
-            $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
-            foreach($results as $job) {
-                $this->assertEquals($keyword, $job->query);
-            }
+        $this->assertInstanceOf('JobApis\Jobs\Client\Collection', $results);
+        foreach($results as $job) {
+            $this->assertEquals($keyword, $job->query);
         }
     }
 

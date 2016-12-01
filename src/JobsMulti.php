@@ -6,9 +6,72 @@ use JobApis\Jobs\Client\Queries\AbstractQuery;
 class JobsMulti
 {
     /**
+     * Search keyword
+     *
+     * @var string
+     */
+    protected $keyword;
+
+    /**
+     * Search location
+     *
+     * @var string
+     */
+    protected $location;
+
+    /**
+     * Maximum age of results (in days)
+     *
+     * @var integer
+     */
+    protected $maxAge;
+
+    /**
+     * Maximum number of results to return in all results
+     *
+     * @var integer
+     */
+    protected $maxResults;
+
+    /**
+     * Order of results
+     *
+     * @var string
+     */
+    protected $order;
+
+    /**
+     * Field to order results by
+     *
+     * @var string
+     */
+    protected $orderBy;
+
+    /**
+     * Results page number
+     *
+     * @var integer
+     */
+    protected $pageNumber;
+
+    /**
+     * Results per page
+     *
+     * @var integer
+     */
+    protected $perPage;
+
+    /**
+     * Job board API providers
+     *
+     * @var array
+     */
+    protected $providers = [];
+
+    /**
      * Job board API query objects
      *
-     * @var AbstractQuery
+     * @var array
      */
     protected $queries = [];
 
@@ -19,133 +82,66 @@ class JobsMulti
      */
     public function __construct($providers = [])
     {
-        foreach ($providers as $provider => $options) {
-            $query = $provider.'Query';
-            $className = 'JobApis\\Jobs\\Client\\Queries\\'.$query;
-            $this->addQuery($provider, $className, $options);
-        }
+        $this->setProviders($providers);
     }
 
     /**
-     * Overrides get<Provider>Jobs() methods
+     * Gets jobs from all providers in a single go and returns a MultiCollection
      *
-     * @param $method
-     * @param $args
-     *
-     * @return mixed
+     * @return Collection
      */
-    public function __call($method, $args)
+    public function getAllJobs($options = [])
     {
-        if ($this->isGetJobsByProviderMethod($method)) {
-            return $this->getJobsByProvider($this->getProviderFromMethod($method));
+        // Set options that are passed in
+        $this->setOptions($options);
+
+        // Create a new Collection
+        $collection = new Collection();
+        foreach ($this->providers as $providerName => $options) {
+            $collection->addCollection($this->getJobsByProvider($providerName));
         }
 
-        throw new \BadMethodCallException(sprintf(
-            '%s does not contain a method by the name of "%s"',
-            __CLASS__,
-            $method
-        ));
-    }
-
-    /**
-     * Instantiates a Query object and adds it to the queries array.
-     *
-     * @param $key string Query name
-     * @param $className string Query class name
-     * @param $options array Parameters to add to constructor
-     *
-     * @return $this
-     */
-    public function addQuery($key, $className, $options = [])
-    {
-        $this->queries[$key] = new $className($options);
-        return $this;
-    }
-
-    /**
-     * Gets jobs from all providers in a single go and returns an array of Collection objects.
-     *
-     * @return array
-     */
-    public function getAllJobs()
-    {
-        $jobs = [];
-        foreach ($this->queries as $key => $query) {
-            $jobs[$key] = $this->getJobsByProvider($key);
-        }
-        return $jobs;
+        // Apply sorting and ordering options and return the collection
+        return $this->applyOptions($collection);
     }
 
     /**
      * Gets jobs from a single provider and hydrates a new jobs collection.
      *
+     * @var $name string Provider name.
+     *
      * @return \JobApis\Jobs\Client\Collection
      */
-    public function getJobsByProvider($provider)
+    public function getJobsByProvider($name = null, $options = [])
     {
+        // Set options that are passed in
+        $this->setOptions($options);
+
         try {
-            $providerName = 'JobApis\\Jobs\\Client\\Providers\\' . $provider . 'Provider';
-            $client = self::createProvider($providerName, $this->queries[$provider]);
-            return $client->getJobs();
+            // Instantiate the query with all our parameters
+            $query = $this->instantiateQuery($name);
+
+            // Instantiate the provider
+            $provider = $this->instantiateProvider($name, $query);
+
+            // Apply sorting and ordering options and return the collection
+            return $this->applyOptions($provider->getJobs());
         } catch (\Exception $e) {
             return (new Collection())->addError($e->getMessage());
         }
     }
 
     /**
-     * Sets a keyword on the query for each provider.
+     * Sets a keyword on the query.
      *
      * @param $keyword string
      *
      * @return $this
      */
-    public function setKeyword($keyword)
+    public function setKeyword($keyword = null)
     {
-        foreach ($this->queries as $provider => $query) {
-            switch ($provider) {
-                case 'Careerbuilder':
-                    $query->set('Keywords', $keyword);
-                    break;
-                case 'Careercast':
-                    $query->set('keyword', $keyword);
-                    break;
-                case 'Careerjet':
-                    $query->set('keywords', $keyword);
-                    break;
-                case 'Dice':
-                    $query->set('text', $keyword);
-                    break;
-                case 'Github':
-                    $query->set('search', $keyword);
-                    break;
-                case 'Govt':
-                    $query->set('query', $keyword);
-                    break;
-                case 'Ieee':
-                    $query->set('keyword', $keyword);
-                    break;
-                case 'Indeed':
-                    $query->set('q', $keyword);
-                    break;
-                case 'Jobinventory':
-                    $query->set('q', $keyword);
-                    break;
-                case 'Juju':
-                    $query->set('k', $keyword);
-                    break;
-                case 'Stackoverflow':
-                    $query->set('q', $keyword);
-                    break;
-                case 'Usajobs':
-                    $query->set('Keyword', $keyword);
-                    break;
-                case 'Ziprecruiter':
-                    $query->set('search', $keyword);
-                    break;
-                default:
-                    throw new \Exception("Provider {$provider} not found");
-            }
-        }
+        $this->keyword = $keyword;
+
         return $this;
     }
 
@@ -156,135 +152,239 @@ class JobsMulti
      *
      * @return $this
      */
-    public function setLocation($location)
+    public function setLocation($location = null)
     {
         if (!$this->isValidLocation($location)) {
             throw new \OutOfBoundsException("Location parameter must follow the pattern 'City, ST'.");
         }
+        $this->location = $location;
 
-        $locationArr = explode(', ', $location);
-        $city = $locationArr[0];
-        $state = $locationArr[1];
+        return $this;
+    }
 
-        foreach ($this->queries as $provider => $query) {
-            switch ($provider) {
-                case 'Careerbuilder':
-                    $query->set('Location', $location);
-                    break;
-                case 'Careercast':
-                    $query->set('location', $location);
-                    break;
-                case 'Careerjet':
-                    $query->set('location', $location);
-                    break;
-                case 'Dice':
-                    $query->set('city', $city);
-                    $query->set('state', $state);
-                    break;
-                case 'Github':
-                    $query->set('location', $location);
-                    break;
-                case 'Govt':
-                    $queryString = $query->get('query').' in '.$location;
-                    $query->set('query', $queryString);
-                    break;
-                case 'Ieee':
-                    $query->set('location', $location);
-                    break;
-                case 'Indeed':
-                    $query->set('l', $location);
-                    break;
-                case 'Jobinventory':
-                    $query->set('l', $location);
-                    break;
-                case 'Juju':
-                    $query->set('l', $location);
-                    break;
-                case 'Stackoverflow':
-                    $query->set('l', $location);
-                    break;
-                case 'Usajobs':
-                    $query->set('LocationName', $location);
-                    break;
-                case 'Ziprecruiter':
-                    $query->set('location', $location);
-                    break;
-                default:
-                    throw new \Exception("Provider {$provider} not found");
-            }
+    /**
+     * Sets the options used for the resulting collection
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setOptions($options = [])
+    {
+        if (isset($options['maxAge'])) {
+            $this->maxAge = $options['maxAge'];
         }
+        if (isset($options['maxResults'])) {
+            $this->maxResults = $options['maxResults'];
+        }
+        if (isset($options['order'])) {
+            $this->order = $options['order'];
+        }
+        if (isset($options['orderBy'])) {
+            $this->orderBy = $options['orderBy'];
+        }
+
         return $this;
     }
 
     /**
      * Sets a page number and number of results per page for each provider.
      *
-     * @param $page integer
+     * @param $pageNumber integer
      * @param $perPage integer
      *
      * @return $this
      */
-    public function setPage($page = 1, $perPage = 10)
+    public function setPage($pageNumber = 1, $perPage = 10)
     {
-        foreach ($this->queries as $provider => $query) {
-            switch ($provider) {
-                case 'Careerbuilder':
-                    $query->set('PageNumber', $page);
-                    $query->set('PerPage', $perPage);
-                    break;
-                case 'Careercast':
-                    $query->set('page', $page);
-                    $query->set('rows', $perPage);
-                    break;
-                case 'Careerjet':
-                    $query->set('page', $page);
-                    $query->set('pagesize', $perPage);
-                    break;
-                case 'Dice':
-                    $query->set('page', $page);
-                    $query->set('pgcnt', $perPage);
-                    break;
-                case 'Github':
-                    $query->set('page', $page-1);
-                    // No per_page option
-                    break;
-                case 'Govt':
-                    $query->set('size', $perPage);
-                    $query->set('from', $this->getStartFrom($page, $perPage));
-                    break;
-                case 'Ieee':
-                    $query->set('page', $page);
-                    $query->set('rows', $perPage);
-                    break;
-                case 'Indeed':
-                    $query->set('limit', $perPage);
-                    $query->set('start', $this->getStartFrom($page, $perPage));
-                    break;
-                case 'Jobinventory':
-                    $query->set('p', $page);
-                    $query->set('limit', $perPage);
-                    break;
-                case 'Juju':
-                    $query->set('page', $page);
-                    $query->set('jpp', $perPage);
-                    break;
-                case 'Stackoverflow':
-                    $query->set('pg', $page);
-                    // No per_page option
-                    break;
-                case 'Usajobs':
-                    $query->set('Page', $page);
-                    $query->set('ResultsPerPage', $perPage);
-                    break;
-                case 'Ziprecruiter':
-                    $query->set('page', $page);
-                    $query->set('jobs_per_page', $perPage);
-                    break;
-                default:
-                    throw new \Exception("Provider {$provider} not found");
+        $this->pageNumber = $pageNumber;
+        $this->perPage = $perPage;
+
+        return $this;
+    }
+
+    /**
+     * Sets an array of providers.
+     *
+     * @param $providers array
+     *
+     * @return $this
+     */
+    public function setProviders($providers = [])
+    {
+        $this->providers = $providers;
+
+        return $this;
+    }
+
+    /**
+     * Apply the options for this JobsMulti object to the Collection
+     *
+     * @param Collection $collection
+     *
+     * @return Collection
+     */
+    protected function applyOptions(Collection $collection)
+    {
+        // Order the results
+        if ($this->orderBy && $this->order) {
+            $collection->orderBy($this->orderBy, $this->order);
+        }
+
+        // Filter older listings out
+        if ($this->maxAge) {
+            $collection->filter(
+                'datePosted',
+                new \DateTime($this->maxAge.' days ago'),
+                '>'
+            );
+        }
+
+        // Truncate to the maximum results (all by default)
+        if ($this->maxResults) {
+            $collection->truncate($this->maxResults);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Gets an array of options from a translator array
+     *
+     * @param array $translator
+     *
+     * @return array
+     */
+    protected function getOptionsFromTranslator($translator = [])
+    {
+        $options = [];
+        foreach ($translator as $standardKey => $providerKey) {
+            if (method_exists($this, $providerKey)) {
+                $options = array_merge(
+                    $options,
+                    $this->$providerKey($this->{$standardKey})
+                );
+            } else {
+                $options[$providerKey] = $this->{$standardKey};
             }
         }
-        return $this;
+        return $options;
+    }
+
+    /**
+     * Gets the options array based on the provider name.
+     *
+     * @param $name
+     *
+     * @return array
+     */
+    protected function getTranslatorForProvider($name)
+    {
+        switch ($name) {
+            case 'Careerbuilder':
+                return [
+                    'keyword' => 'Keywords',
+                    'location' => 'Location',
+                    'pageNumber' => 'PageNumber',
+                    'perPage' => 'PerPage',
+                ];
+                break;
+            case 'Careercast':
+                return [
+                    'keyword' => 'keyword',
+                    'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'rows',
+                ];
+                break;
+            case 'Careerjet':
+                return [
+                    'keyword' => 'keywords',
+                    'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'pagesize',
+                ];
+                break;
+            case 'Dice':
+                return [
+                    'keyword' => 'text',
+                    'location' => 'getCityAndState',
+                    'pageNumber' => 'page',
+                    'perPage' => 'pgcnt',
+                ];
+                break;
+            case 'Github':
+                return [
+                    'keyword' => 'search',
+                    'location' => 'location',
+                    'pageNumber' => 'getPageMinusOne',
+                ];
+                break;
+            case 'Govt':
+                return [
+                    'keyword' => 'getQueryWithKeywordAndLocation',
+                    'pageNumber' => 'getFrom',
+                    'perPage' => 'size',
+                ];
+                break;
+            case 'Ieee':
+                return [
+                    'keyword' => 'keyword',
+                    'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'rows',
+                ];
+                break;
+            case 'Indeed':
+                return [
+                    'keyword' => 'q',
+                    'location' => 'l',
+                    'pageNumber' => 'getStart',
+                    'perPage' => 'limit',
+                ];
+                break;
+            case 'Jobinventory':
+                return [
+                    'keyword' => 'q',
+                    'location' => 'l',
+                    'pageNumber' => 'p',
+                    'perPage' => 'limit',
+                ];
+                break;
+            case 'Juju':
+                return [
+                    'keyword' => 'k',
+                    'location' => 'l',
+                    'pageNumber' => 'page',
+                    'perPage' => 'jpp',
+                ];
+                break;
+            case 'Stackoverflow':
+                return [
+                    'keyword' => 'q',
+                    'location' => 'l',
+                    'pageNumber' => 'pg',
+                ];
+                break;
+            case 'Usajobs':
+                return [
+                    'keyword' => 'Keyword',
+                    'location' => 'LocationName',
+                    'pageNumber' => 'Page',
+                    'perPage' => 'ResultsPerPage',
+                ];
+                break;
+            case 'Ziprecruiter':
+                return [
+                    'keyword' => 'search',
+                    'location' => 'location',
+                    'pageNumber' => 'page',
+                    'perPage' => 'jobs_per_page',
+                ];
+                break;
+            default:
+                throw new \Exception("Provider {$name} not found");
+        }
     }
 
     /**
@@ -295,22 +395,110 @@ class JobsMulti
      *
      * @return AbstractProvider
      */
-    public static function createProvider($name, AbstractQuery $query)
+    protected function instantiateProvider($name, AbstractQuery $query)
     {
-        return new $name($query);
+        $path = 'JobApis\\Jobs\\Client\\Providers\\' . $name . 'Provider';
+
+        return new $path($query);
     }
 
     /**
-     * Gets a start from count for APIs that use per_page and start_from pattern.
+     * Instantiates a query using a client name.
      *
-     * @param int $page
-     * @param int $perPage
+     * @param null $name
      *
-     * @return int
+     * @return AbstractQuery
      */
-    private function getStartFrom($page = 1, $perPage = 10)
+    protected function instantiateQuery($name)
     {
-        return ($page * $perPage) - $perPage;
+        $path = 'JobApis\\Jobs\\Client\\Queries\\' . $name . 'Query';
+
+        $options = array_merge(
+            $this->providers[$name],
+            $this->getOptionsFromTranslator($this->getTranslatorForProvider($name))
+        );
+
+        return new $path($options);
+    }
+
+    /**
+     * Get the city and state as an array from a location string.
+     *
+     * @return array
+     */
+    private function getCityAndState()
+    {
+        if ($this->location) {
+            $locationArr = explode(', ', $this->location);
+            return [
+                'city' => $locationArr[0],
+                'state' => $locationArr[1],
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Gets a from value.
+     *
+     * @return array
+     */
+    private function getFrom()
+    {
+        if ($this->pageNumber && $this->perPage) {
+            return [
+                'from' => ($this->pageNumber * $this->perPage) - $this->perPage,
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Gets page number minus 1.
+     *
+     * @return array
+     */
+    private function getPageMinusOne()
+    {
+        if ($this->pageNumber) {
+            return [
+                'page' => $this->pageNumber - 1,
+            ];
+        }
+        return [];
+    }
+
+    /**
+     * Get the query with keyword and location.
+     *
+     * @return array
+     */
+    private function getQueryWithKeywordAndLocation()
+    {
+        $queryString = $this->keyword;
+
+        if ($this->location) {
+            $queryString .= ' in '.$this->location;
+        }
+
+        return [
+            'query' => $queryString,
+        ];
+    }
+
+    /**
+     * Gets a start at value.
+     *
+     * @return array
+     */
+    private function getStart()
+    {
+        if ($this->pageNumber && $this->perPage) {
+            return [
+                'start' => ($this->pageNumber * $this->perPage) - $this->perPage,
+            ];
+        }
+        return [];
     }
 
     /**
@@ -324,30 +512,5 @@ class JobsMulti
     {
         preg_match("/([^,]+),\s*(\w{2})/", $location, $matches);
         return isset($matches[1]) && isset($matches[2]) ? true : false;
-    }
-
-    /**
-     * Tests whether the method is a valid get<Provider>Jobs() method.
-     *
-     * @param $method
-     *
-     * @return bool
-     */
-    private function isGetJobsByProviderMethod($method)
-    {
-        return preg_match('/(get)(.*?)(Jobs)/', $method, $matches) && $matches[2] && isset($this->queries[$matches[2]]);
-    }
-
-    /**
-     * Get the provider name from the method.
-     *
-     * @param $method
-     *
-     * @return string
-     */
-    private function getProviderFromMethod($method)
-    {
-        preg_match('/(get)(.*?)(Jobs)/', $method, $matches);
-        return $matches[2];
     }
 }

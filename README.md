@@ -12,6 +12,8 @@ Each client on its own will give you more flexibility and access to all the para
 
 ## Usage
 
+JobsMulti allows you to easily retrieve job listings from many job boards with one library and just a few lines of code. Here is a brief overview of what you can do:
+
 ```php
 // Include as many or as few providers as you want. Just be sure to include any required keys.
 $providers = [
@@ -45,20 +47,49 @@ $providers = [
 // Instantiate a new JobsMulti client
 $client = new JobsMulti($providers);
 
-// Set the parameters in order: Keyword, Location, Page
+// Set the parameters: Keyword, Location, Page
 $client->setKeyword('training')
+    // Location must be formatted "City, ST".
     ->setLocation('chicago, il')
     ->setPage(1, 10);
 
 // Make queries to each individually
-$indeedJobs = $client->getIndeedJobs();
-$diceJobs = $client->getDiceJobs();
+$indeedJobs = $client->getJobsByProvider('Indeed');
+
+// And include an array of options if you'd like
+$options = [
+    'maxAge' => 30,              // Maximum age (in days) of listings
+    'maxResults' => 100,         // Maximum number of results
+    'orderBy' => 'datePosted',   // Field to order results by
+    'order' => 'desc',           // Order ('asc' or 'desc')
+];
+$diceJobs = $client->getJobsByProvider('Dice', $options);
 
 // Or get an array with results from all the providers at once
-$jobs = $client->getAllJobs();
+$jobs = $client->getAllJobs($options);
 ```
 
-The `get<Provider>Jobs()` methods will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) of [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects, while the `getAllJobs()` method will return an array of these collections with keys for each API provider.
+The `getJobsByProvider` and the `getAllJobs` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) containing many [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
+
+## Documented Methods
+
+- `setProviders($providers)` Set the providers you want to use (see example above) with default and required parameters for each.
+
+- `setKeyword($keyword)` Set the search string.
+
+- `setLocation($location)` Set the location string. Should be in the format "City, ST". Currently only supports US locations.
+
+- `setPage($pageNumber, $perPage)` Set the results page options.
+
+- `setOptions($options)` Set options for `getAllJobs` method. Options include:
+    - `maxAge` Maximum age (in days) of listings.
+    - `maxResults` Truncate the results to a certain number.
+    - `order` Sort results by `asc` or `desc`.
+    - `orderBy` Field to order results by, eg: `datePosted`.
+
+- `getAllJobs($options)` Get a collection of jobs from all providers set above. See `setOptions` method above for available options.
+
+- `getJobsByProvider($provider, $options)` Get a collection of jobs from a single provider by name. The provider must be in the array of providers. See `setOptions` method above for available options.
 
 ## Supported APIs
 

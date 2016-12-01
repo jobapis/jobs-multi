@@ -1,6 +1,20 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 1.0.0 - WIP
+
+### Added
+- Requirement on `jobs-common` ^2.1.0 for new Collection methods.
+- Options for `getAllJobs` and `getJobs` method.
+- Making integration tests run every time.
+
+### Fixed
+- Moving query instantiation to the end of the process to prevent overwriting queries.
+- Improved test coverage.
+
+### Removed
+- `Get<Provider>Jobs` Method. Now you must use `getJobsByProvider` or `getAllJobs`.
+
 ## 0.9.0 - 2016-11-29
 
 ### Added
@@ -105,11 +119,11 @@ All Notable changes to `jobs-multi` will be documented in this file.
 - Support for 5 initial APIs.
 - Unit and integration tests.
 
-## Fixed
+### Fixed
 - Nothing
 
-## Removed
+### Removed
 - Nothing
 
-## Security
+### Security
 - Nothing
