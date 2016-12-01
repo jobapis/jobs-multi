@@ -4,7 +4,7 @@ All Notable changes to `jobs-multi` will be documented in this file.
 ## 1.0.0 - WIP
 
 ### Added
-- Requirement on `jobs-common` v2.1 for new Collection methods.
+- Requirement on `jobs-common` ^2.1.0 for new Collection methods.
 - Options for `getAllJobs` and `getJobs` method.
 - Making integration tests run every time.
 

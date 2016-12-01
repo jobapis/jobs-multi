@@ -49,6 +49,7 @@ $client = new JobsMulti($providers);
 
 // Set the parameters: Keyword, Location, Page
 $client->setKeyword('training')
+    // Location must be formatted "City, ST".
     ->setLocation('chicago, il')
     ->setPage(1, 10);
 
@@ -76,7 +77,7 @@ The `getJobsByProvider` and the `getAllJobs` method will return a [Collection](h
 
 - `setKeyword($keyword)` Set the search string.
 
-- `setLocation($location)` Set the location string. Should be in the format "City, ST".
+- `setLocation($location)` Set the location string. Should be in the format "City, ST". Currently only supports US locations.
 
 - `setPage($pageNumber, $perPage)` Set the results page options.
 
