@@ -39,6 +39,11 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         $this->client = new JobsMulti($this->providers);
     }
 
+    public function testItCanSetOptions()
+    {
+        $this->markTestIncomplete("WIP");
+    }
+
     public function testItCanSetProviders()
     {
         $providers = [
@@ -137,6 +142,11 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testItCanGetResultsFromSingleApiWithOptions()
+    {
+        $this->markTestIncomplete("WIP");
+    }
+
     public function testItCanGetAllResultsFromApis()
     {
         $providers = [
@@ -160,6 +170,11 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
         foreach($results as $job) {
             $this->assertEquals($keyword, $job->query);
         }
+    }
+
+    public function testItCanGetAllResultsFromApisWithOptions()
+    {
+        $this->markTestIncomplete("WIP");
     }
 
     private function getProtectedProperty($object, $property = null)

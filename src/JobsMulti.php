@@ -469,19 +469,6 @@ class JobsMulti
     }
 
     /**
-     * Get the provider name from the method.
-     *
-     * @param $method
-     *
-     * @return string
-     */
-    private function getProviderFromMethod($method)
-    {
-        preg_match('/(get)(.*?)(Jobs)/', $method, $matches);
-        return $matches[2];
-    }
-
-    /**
      * Get the query with keyword and location.
      *
      * @return array
@@ -525,17 +512,5 @@ class JobsMulti
     {
         preg_match("/([^,]+),\s*(\w{2})/", $location, $matches);
         return isset($matches[1]) && isset($matches[2]) ? true : false;
-    }
-
-    /**
-     * Tests whether the method is a valid get<Provider>Jobs() method.
-     *
-     * @param $method
-     *
-     * @return bool
-     */
-    private function isGetJobsByProviderMethod($method)
-    {
-        return preg_match('/(get)(.*?)(Jobs)/', $method, $matches) && $matches[2] && isset($this->queries[$matches[2]]);
     }
 }
