@@ -1,7 +1,12 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
-## 1.0.0 - WIP
+## 1.0.1 - 2016-12-23
+
+### Fixed
+- Updating jobs-common to fix bug in source name.
+
+## 1.0.0 - 2016-12-01
 
 ### Added
 - Requirement on `jobs-common` ^2.1.0 for new Collection methods.
