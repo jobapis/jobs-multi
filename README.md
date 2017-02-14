@@ -10,7 +10,7 @@
 
 ## About
 
-This package allows you to easily make basic queries to job board APIs supported by [Jobs Common v2](https://github.com/jobapis/jobs-common).
+JobsMulti allows you to easily retrieve job listings from multiple job boards with one library and just a few lines of code.
 
 Each client on its own will give you more flexibility and access to all the parameters for its respective API, but this package allows you to query one or more API in a single call. See [Usage](#usage) section below for detailed examples.
 
@@ -20,8 +20,6 @@ Each client on its own will give you more flexibility and access to all the para
 
 
 ## Usage
-
-JobsMulti allows you to easily retrieve job listings from many job boards with one library and just a few lines of code. Here is a brief overview of what you can do:
 
 Install the package via composer:
 ```bash
