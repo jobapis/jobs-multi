@@ -1,4 +1,6 @@
-# Jobs Multi
+# [![JobApis.com](https://i.imgur.com/9VOAkrZ.png)](https://www.jobapis.com) Jobs Multi
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/jobapis.svg?style=social&label=Follow%20%40jobapis)](https://twitter.com/jobapis)
 [![Latest Version](https://img.shields.io/github/release/jobapis/jobs-multi.svg?style=flat-square)](https://github.com/jobapis/jobs-multi/releases)
 [![Software License](https://img.shields.io/badge/license-APACHE%202.0-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/jobapis/jobs-multi/master.svg?style=flat-square&1)](https://travis-ci.org/jobapis/jobs-multi)
@@ -6,9 +8,16 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/jobapis/jobs-multi.svg?style=flat-square)](https://scrutinizer-ci.com/g/jobapis/jobs-multi)
 [![Total Downloads](https://img.shields.io/packagist/dt/jobapis/jobs-multi.svg?style=flat-square)](https://packagist.org/packages/jobapis/jobs-multi)
 
+## About
+
 This package allows you to easily make basic queries to job board APIs supported by [Jobs Common v2](https://github.com/jobapis/jobs-common).
 
-Each client on its own will give you more flexibility and access to all the parameters for its respective API, but this package allows you to query one or more API in a single call.
+Each client on its own will give you more flexibility and access to all the parameters for its respective API, but this package allows you to query one or more API in a single call. See [Usage](#usage) section below for detailed examples.
+
+### Mission
+
+[JobApis](https://www.jobapis.com) makes job board and company data more accessible through open source software. To learn more, visit [JobApis.com](https://www.jobapis.com), or contact us at [admin@jobapis.com](mailto:admin@jobapis.com).
+
 
 ## Usage
 
@@ -81,6 +90,7 @@ $jobs = $client->getAllJobs($options);
 
 The `getJobsByProvider` and the `getAllJobs` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) containing many [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
 
+
 ## Documented Methods
 
 - `setProviders($providers)` Set the providers you want to use (see example above) with default and required parameters for each.
@@ -121,23 +131,31 @@ This package currently supports the following API providers:
 - [USAJobs](https://github.com/jobapis/jobs-usajobs)
 - [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)
 
-If you'd like to add support for another provider, please see [Contributing.md](CONTRIBUTING.MD).
+If you'd like to add support for another provider, please see the [contributing section below](#contributing).
+
 
 ## Testing
 
-``` bash
-$ ./vendor/bin/phpunit
-```
+1. Clone this repository from Github.
+2. Install the dependencies with Composer: `$ composer install`.
+3. Run the test suite: `$ ./vendor/bin/phpunit`.
+
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Contributions are welcomed and encouraged! Please see [JobApis' contribution guidelines](https://www.jobapis.com/contributing/) for details, or create an issue in Github if you have any questions.
 
-## Credits
 
-- [Karl Hughes](https://github.com/karllhughes)
-- [All Contributors](https://github.com/jobapis/jobs-multi/contributors)
+## Legal
 
-## License
+### Disclaimer
 
-The Apache 2.0. Please see [License File](/LICENSE.md) for more information.
+This package is not affiliated with or supported by :provider_name and we are not responsible for any use or misuse of this software.
+
+### License
+
+This package uses the Apache 2.0 license. Please see the [License File](https://www.jobapis.com/license/) for more information.
+
+### Copyright
+
+Copyright 2017, Karl Hughes <khughes.me@gmail.com>.
