@@ -14,6 +14,11 @@ Each client on its own will give you more flexibility and access to all the para
 
 JobsMulti allows you to easily retrieve job listings from many job boards with one library and just a few lines of code. Here is a brief overview of what you can do:
 
+Install the package via composer:
+```bash
+$ composer require jobapis/jobs-multi
+```
+
 ```php
 // Include as many or as few providers as you want. Just be sure to include any required keys.
 $providers = [
