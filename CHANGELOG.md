@@ -1,6 +1,12 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 1.1.0 - 2017-02-14
+
+### Added
+- Support for [Monster RSS feed](https://github.com/jobapis/jobs-monster)
+- Support for [Jobs2Careers API](https://github.com/jobapis/jobs-jobs2careers)
+
 ## 1.0.1 - 2016-12-23
 
 ### Fixed

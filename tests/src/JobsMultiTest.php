@@ -26,9 +26,15 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
                 'publisher' => uniqid(),
             ],
             'Jobinventory' => [],
+            'J2c' => [
+                'id' => uniqid(),
+                'pass' => uniqid(),
+            ],
             'Juju' => [
                 'partnerid' => uniqid(),
             ],
+            'Monster' => [],
+            'Stackoverflow' => [],
             'Usajobs' => [
                 'AuthorizationKey' => uniqid(),
             ],
@@ -142,6 +148,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Govt',
             'Ieee',
             'Jobinventory',
+            'Monster',
             'Stackoverflow',
         ];
 
@@ -174,6 +181,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Govt',
             'Ieee',
             'Jobinventory',
+            'Monster',
             'Stackoverflow',
         ];
 
@@ -212,6 +220,7 @@ class JobsMultiTest extends \PHPUnit_Framework_TestCase
             'Govt' => [],
             'Ieee' => [],
             'Jobinventory' => [],
+            'Monster' => [],
             'Stackoverflow' => [],
         ];
         $client = new JobsMulti($providers);

@@ -347,7 +347,15 @@ class JobsMulti
                 return [
                     'keyword' => 'q',
                     'location' => 'l',
-                    'pageNumber' => 'p',
+                    'pageNumber' => 'getStart',
+                    'perPage' => 'limit',
+                ];
+                break;
+            case 'J2c':
+                return [
+                    'keyword' => 'q',
+                    'location' => 'l',
+                    'pageNumber' => 'start',
                     'perPage' => 'limit',
                 ];
                 break;
@@ -357,6 +365,13 @@ class JobsMulti
                     'location' => 'l',
                     'pageNumber' => 'page',
                     'perPage' => 'jpp',
+                ];
+                break;
+            case 'Monster':
+                return [
+                    'keyword' => 'q',
+                    'location' => 'where',
+                    'pageNumber' => 'page',
                 ];
                 break;
             case 'Stackoverflow':
