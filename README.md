@@ -32,9 +32,14 @@ $providers = [
         'publisher' => '<YOUR PUBLISHER ID>',
     ],
     'Jobinventory' => [],
+    'J2c' => [
+        'id' => '<YOUR PUBLISHER ID>',
+        'pass' => '<YOUR PUBLISHER PASSWORD>',
+    ],
     'Juju' => [
         'partnerid' => '<YOUR PARTNER ID>',
     ],
+    'Monster' => [],
     'Stackoverflow' => [],
     'Usajobs' => [
         'AuthorizationKey' => '<YOUR API KEY>',
@@ -104,7 +109,9 @@ This package currently supports the following API providers:
 - [IEEE](https://github.com/jobapis/jobs-ieee)
 - [Indeed](https://github.com/jobapis/jobs-indeed)
 - [Jobinventory](https://github.com/jobapis/jobs-jobinventory)
+- [Jobs2Careers](https://github.com/jobapis/jobs-jobs2careers)
 - [Juju](https://github.com/jobapis/jobs-juju)
+- [Monster](https://github.com/jobapis/jobs-monster)
 - [Stack Overflow](https://github.com/jobapis/jobs-stackoverflow)
 - [USAJobs](https://github.com/jobapis/jobs-usajobs)
 - [Ziprecruiter](https://github.com/jobapis/jobs-ziprecruiter)
