@@ -1,6 +1,15 @@
 # Changelog
 All Notable changes to `jobs-multi` will be documented in this file.
 
+## 1.1.1 - 2017-05-17
+
+### Added
+- Improvements to the documentation in `README.md`.
+- An `example` folder with a barebones example of using the library.
+
+### Removed
+- `LICENSE.md` and `CONTRIBUTING.md` as both are now online at www.jobapis.com.
+
 ## 1.1.0 - 2017-02-14
 
 ### Added

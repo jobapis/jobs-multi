@@ -21,13 +21,37 @@ Each client on its own will give you more flexibility and access to all the para
 
 ## Usage
 
-Install the package via composer:
+### Prerequisites
+
+- PHP 5.5+
+- [Composer PHP package manager](https://getcomposer.org/)
+
+### Installation
+
+Create a new directory, navigate to it, and install the Jobs Multi package with composer:
+
 ```bash
-$ composer require jobapis/jobs-multi
+composer require jobapis/jobs-multi
 ```
 
+### Configuration
+
+Create a new file called `index.php` and open it up in your favorite text editor.
+
+Add the [Composer autoload file](https://getcomposer.org/doc/01-basic-usage.md#autoloading) to the top of the file:
+
 ```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+```
+
+Create an array of providers you'd like to include. Each "provider" is a job board that Jobs Multi will search for your jobs:
+
+```php
+
 // Include as many or as few providers as you want. Just be sure to include any required keys.
+
 $providers = [
     'Careerbuilder' => [
         'DeveloperKey' => '<YOUR DEVELOPER KEY>',
@@ -60,52 +84,67 @@ $providers = [
         'api_key' => '<YOUR API KEY>',
     ],
 ];
+```
 
-// Instantiate a new JobsMulti client
-$client = new JobsMulti($providers);
+### Job Collection
 
-// Set the parameters: Keyword, Location, Page
+Next, instantiate the JobsMulti client in your `index.php` file:
+
+```php
+$client = new \JobApis\Jobs\Client\JobsMulti($providers);
+```
+
+Set the parameters for your search. These methods are documented in detail below.
+
+```php
 $client->setKeyword('training')
-    // Location must be formatted "City, ST".
     ->setLocation('chicago, il')
     ->setPage(1, 10);
+```
 
-// Make queries to each individually
-$indeedJobs = $client->getJobsByProvider('Indeed');
+You can also create an array of `$options` that will filter your results *after* they're retrieved from the providers:
 
-// And include an array of options if you'd like
+```php
 $options = [
     'maxAge' => 30,              // Maximum age (in days) of listings
     'maxResults' => 100,         // Maximum number of results
     'orderBy' => 'datePosted',   // Field to order results by
     'order' => 'desc',           // Order ('asc' or 'desc')
 ];
-$diceJobs = $client->getJobsByProvider('Dice', $options);
+```
+
+Then you can retrieve results from each provider individually or from all providers at once:
+
+```php
+// Make queries to each individually
+$indeedJobs = $client->getJobsByProvider('Indeed');
 
 // Or get an array with results from all the providers at once
 $jobs = $client->getAllJobs($options);
 ```
+
+For a complete working example, see [the example folder in this repository](/example/index.php).
 
 The `getJobsByProvider` and the `getAllJobs` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) containing many [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
 
 
 ## Documented Methods
 
-- `setProviders($providers)` Set the providers you want to use (see example above) with default and required parameters for each.
+- `setProviders($providers)` Set an array of providers you want to use with default and required parameters for each.
 
-- `setKeyword($keyword)` Set the search string.
+- `setKeyword($keyword)` Set the search string. For example, "software engineer" or "accountant".
 
-- `setLocation($location)` Set the location string. Should be in the format "City, ST". Currently only supports US locations.
+- `setLocation($location)` Set the location string. Should be in the format "City, ST". Currently only supports US locations. For example, "Chicago, IL" or "washington, dc".
 
-- `setPage($pageNumber, $perPage)` Set the results page options.
+- `setPage($pageNumber, $perPage)` Set the page number and number of results per page *for each provider*. This means that if you use the `getAllJobs()` method to retrieve your listings, you will get at most `$perPage` *times* the number of providers you choose to search.
 
-- `setOptions($options)` Set options for `getAllJobs` method. Options include:
+- `setOptions($options)` Set options for get method. These options will be applied *after* all results are collected from the providers, so they function more like filters. Options include:
     - `maxAge` Maximum age (in days) of listings.
     - `maxResults` Truncate the results to a certain number.
     - `order` Sort results by `asc` or `desc`.
     - `orderBy` Field to order results by, eg: `datePosted`.
 
-- `getAllJobs($options)` Get a collection of jobs from all providers set above. See `setOptions` method above for available options.
+- `getAllJobs($options)` Get a collection of jobs from *all providers* configured above. See `setOptions` method above for available options.
 
 - `getJobsByProvider($provider, $options)` Get a collection of jobs from a single provider by name. The provider must be in the array of providers. See `setOptions` method above for available options.
 

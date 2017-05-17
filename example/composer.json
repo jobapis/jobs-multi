@@ -1,0 +1,5 @@
+{
+    "require": {
+        "jobapis/jobs-multi": "^1.1"
+    }
+}
